@@ -7,8 +7,9 @@ setup(
     install_requires=[],
     author='John Gargalionis',
     author_email='john.gargalionis@gmail.com',
-    description='Python access to the one-loop UV/IR dictionary of the linear SM extensions',
+    description='One-loop matching data for the linear SM extensions',
     url='https://github.com/johngarg/lsme',
+    license='GPLv3',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',

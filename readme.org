@@ -1,0 +1,53 @@
+* LSME: The one-loop dictionary for the linear SM extensions
+
+`lsme` is a Python package that provides one-loop matching data for the linear SM extensions: multiplets generating dimension-6 operators at tree level in the Standard Model Effective Field Theory (SMEFT).  The package is organized into two submodules: one for retrieving numerical coefficients and another for searching a symbolic database.  The results presented here were calculated and compiled for the research project "Mapping the one-loop structure of linear SM extensions" (arXiv:24XX.XXXXX).
+
+* Installation
+
+You can install the package via pip:
+
+#+begin_src bash
+pip install lsme
+#+end_src
+
+* Usage
+
+** Numerical Coefficients
+
+The `lsme.numeric` subpackage contains Python classes for each model, with methods that return numerical values for the matching coefficients of the B-conserving operators in the dimension-6 SMEFT.
+
+Example:
+
+#+begin_src python
+import lsme.numeric.GranadaPi7MatchingResult as Pi7
+
+# Create an instance of the model and compute a coefficient
+# All massive params are in TeV
+pi7 = Pi7(scale=1.)
+
+# Coeffs are methods with the same name as you get from Matchmaker 
+# Flavour indices are 0-initialised
+coeff = pi7.alphaOdB(0,0)
+
+# TODO Return a dictionary of all coefficients in WCxf
+coeff_dict = pi7.coeff_dict()
+#+end_src
+
+** Symbolic Database
+
+The `lsme.symbolic` subpackage will provide a symbolic database that is searchable, allowing users to explore the matching data in a complementary way.  This is still under development.
+
+* Submodules
+
+- `lsme.numeric`: Contains models represented by classes whose methods return numerical matching coefficients.
+- `lsme.symbolic`: A searchable symbolic database of the matching data.
+
+* License
+
+This project is licensed under the GPLv3 License. See the LICENSE file for details.
+
+* Tasks
+
+- [ ] Add symbolic database
+- [ ] Vectorise eith =np.einsum=!
+- [ ] Return coefficient dictionary in WCxf [arXiv:1712.05298]
