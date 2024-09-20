@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='your_package',
+    name='lsme',
     version='0.1.0',
     packages=find_packages(),
     install_requires=[],
-    author='Your Name',
-    author_email='your.email@example.com',
-    description='A description of your package',
-    url='https://github.com/yourusername/your_package',
+    author='John Gargalionis',
+    author_email='john.gargalionis@gmail.com',
+    description='Python access to the one-loop UV/IR dictionary of the linear SM extensions',
+    url='https://github.com/johngarg/lsme',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
