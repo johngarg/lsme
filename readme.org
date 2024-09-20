@@ -1,6 +1,6 @@
 * LSME: The one-loop dictionary for the linear SM extensions
 
-`lsme` is a Python package that provides one-loop matching data for the linear SM extensions: multiplets generating dimension-6 operators at tree level in the Standard Model Effective Field Theory (SMEFT).  The package is organized into two submodules: one for retrieving numerical coefficients and another for searching a symbolic database.  The results presented here were calculated and compiled for the research project "Mapping the one-loop structure of linear SM extensions" (arXiv:24XX.XXXXX).
+=lsme= is a Python package that provides one-loop matching data for the linear SM extensions: multiplets generating dimension-6 operators at tree level in the Standard Model Effective Field Theory (SMEFT).  The package is organised into two submodules: one for retrieving numerical coefficients and another for searching a symbolic database.  The results presented here were calculated and compiled for the research project "Mapping the one-loop structure of linear SM extensions" (arXiv:24XX.XXXXX).
 
 * Installation
 
@@ -14,7 +14,7 @@ pip install lsme
 
 ** Numerical Coefficients
 
-The `lsme.numeric` subpackage contains Python classes for each model, with methods that return numerical values for the matching coefficients of the B-conserving operators in the dimension-6 SMEFT.
+The =lsme.numeric= subpackage contains Python classes for each model, with methods that return numerical values for the matching coefficients of the B-conserving operators in the dimension-6 SMEFT.
 
 Example:
 
@@ -35,12 +35,12 @@ coeff_dict = pi7.coeff_dict()
 
 ** Symbolic Database
 
-The `lsme.symbolic` subpackage will provide a symbolic database that is searchable, allowing users to explore the matching data in a complementary way.  This is still under development.
+The =lsme.symbolic= subpackage will provide a symbolic database that is searchable, allowing users to explore the matching data in a complementary way.  This is still under development.
 
 * Submodules
 
-- `lsme.numeric`: Contains models represented by classes whose methods return numerical matching coefficients.
-- `lsme.symbolic`: A searchable symbolic database of the matching data.
+- =lsme.numeric=: Contains models represented by classes whose methods return numerical matching coefficients.
+- =lsme.symbolic=: A searchable symbolic database of the matching data.
 
 * License
 
@@ -48,6 +48,6 @@ This project is licensed under the GPLv3 License. See the LICENSE file for detai
 
 * Tasks
 
-- [ ] Add symbolic database
-- [ ] Vectorise eith =np.einsum=!
-- [ ] Return coefficient dictionary in WCxf [arXiv:1712.05298]
+- Add symbolic database
+- Vectorise with =np.einsum=!
+- Return coefficient dictionary in WCxf [arXiv:1712.05298]
