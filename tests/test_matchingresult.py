@@ -18,7 +18,6 @@ def test_generic_matching_result_initialization():
 
 def test_coeff_dict():
     import wilson
-    import flavio
     from wilson import wcxf
 
     zeta = Zeta()
