@@ -16,6 +16,18 @@ def test_generic_matching_result_initialization():
     # Check e.g. that vev is present
     assert result.vev
 
+def test_ratio_tree_loop():
+    zeta = Zeta()
+
+    zeta.onelooporder = 0
+    tree = zeta.alphaOlq3(0,0,0,0)
+
+    zeta.onelooporder = 1
+    loop = zeta.alphaOlq3(0,0,0,0) - tree
+
+    assert zeta.ratio_tree_loop("alphaOlq3", [0,0,0,0]) == tree / loop
+
+
 def test_coeff_dict():
     import wilson
     from wilson import wcxf

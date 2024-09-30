@@ -92,9 +92,9 @@ class GenericMatchingResult:
 
         return running
 
-    def delta_tree_loop(self, coeff: str, args: list[int] = []):
-        """Returns the difference between the tree-level part and loop-level
-        part `coeff` for flavour indices listed in `args`.
+    def ratio_tree_loop(self, coeff: str, args: list[int] = []):
+        """Returns the ratio between the tree-level part and loop-level part
+        `coeff` for flavour indices listed in `args`.
 
         """
         # Set this here to set it back at the end
@@ -117,7 +117,7 @@ class GenericMatchingResult:
         # Set onelooporder back to what it was
         self.onelooporder = original_onelooporder
 
-        return tree_level_result - loop_level_result
+        return tree_level_result / loop_level_result
 
     def coeff_dict(self):
         sectors = wcxf.Basis["SMEFT", "Warsaw"].sectors
