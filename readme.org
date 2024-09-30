@@ -19,7 +19,7 @@ The =lsme.numeric= subpackage contains Python classes for each model, with metho
 Example:
 
 #+begin_src python
-import lsme.numeric.GranadaPi7MatchingResult as Pi7
+from lsme.numeric import GranadaPi7MatchingResult as Pi7
 
 # Create an instance of the model and compute a coefficient
 # All massive params are in TeV
@@ -29,7 +29,7 @@ pi7 = Pi7(scale=1.)
 # Flavour indices are 0-initialised
 coeff = pi7.alphaOdB(0,0)
 
-# TODO Return a dictionary of all coefficients in WCxf
+# Return a dictionary of all coefficients in WCxf [arXiv:1712.05298]
 coeff_dict = pi7.coeff_dict()
 #+end_src
 
@@ -48,6 +48,6 @@ This project is licensed under the GPLv3 License. See the LICENSE file for detai
 
 * Tasks
 
-- Add symbolic database
-- Vectorise with =np.einsum=!
-- Return coefficient dictionary in WCxf [arXiv:1712.05298]
+- [ ] Add symbolic database
+- [ ] Vectorise with =np.einsum=!
+- [X] Return coefficient dictionary in WCxf [arXiv:1712.05298]
