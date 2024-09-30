@@ -16,14 +16,11 @@
 # onelooporder
 # yu
 
-# Include upper directory in path to import GenericMatchingResult from
-# matchingresult
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), "..")))
-
-import matchingresult
 import numpy as np
+
+import lsme.numeric.matchingresult as matchingresult
 
 class GranadaDelta1MatchingResult(matchingresult.GenericMatchingResult):
     def __init__(self, name='Delta1'):

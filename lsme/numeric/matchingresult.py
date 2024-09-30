@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from typing import List
 import numpy as np
 
+from wilson import wcxf
+
 GEV = 1e-3
 MZ = 91.1876 * GEV
 
@@ -89,3 +91,66 @@ class GenericMatchingResult:
         running = func(*args) - matching
 
         return running
+
+    def delta_tree_loop(self, coeff: str, args: list[int] = []):
+        """Returns the difference between the tree-level part and loop-level
+        part `coeff` for flavour indices listed in `args`.
+
+        """
+        # Set this here to set it back at the end
+        original_onelooporder = self.onelooporder
+
+        # Extract the method into a function
+        func = getattr(self, coeff)
+
+        # Get total result
+        self.onelooporder = 1
+        total_result = func(*args)
+
+        # Get tree-level result
+        self.onelooporder = 0
+        tree_level_result = func(*args)
+
+        # Isolate just the loop-level result
+        loop_level_result = total_result - tree_level_result
+
+        # Set onelooporder back to what it was
+        self.onelooporder = original_onelooporder
+
+        return tree_level_result - loop_level_result
+
+    def coeff_dict(self):
+        sectors = wcxf.Basis["SMEFT", "Warsaw"].sectors
+        coeff_dict_ = {}
+        for sector, ops in sectors.items():
+            if sector == "dB=dL=1":
+                print(
+                    f"Skipping operators in {sector} sector, since these are not implemented yet."
+                )
+                continue
+
+            for op in ops.keys():
+                coeff_dict_[op] = self._get_wc_in_wcxf(op)
+
+        return coeff_dict_
+
+    def _get_wc_in_wcxf(self, op: str):
+        name, *flavour = op.split("_")
+        zero_indexed_flavour_indices = [int(i)-1 for i in flavour[0]] if flavour else []
+        name = name.replace("phi", "H").replace("tilde", "t")
+        wcxf_mme_map = {
+            "G": "3G",
+            "Gt": "3Gt",
+            "W": "3W",
+            "Wt": "3Wt",
+            "HWtB": "HWBt",
+        }
+
+        if name in wcxf_mme_map:
+            name = wcxf_mme_map[name]
+
+        func = getattr(self, f"alphaO{name}" if name != "llHH" else "alphaWeinberg")
+        return func(*zero_indexed_flavour_indices)
+
+    def write_wcxf(self):
+        pass

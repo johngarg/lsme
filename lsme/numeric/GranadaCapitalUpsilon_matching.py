@@ -22,10 +22,9 @@
 
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), "..")))
-
-import matchingresult
 import numpy as np
+
+import lsme.numeric.matchingresult as matchingresult
 
 class GranadaUpsilonMatchingResult(matchingresult.GenericMatchingResult):
     def __init__(self, name='Upsilon'):

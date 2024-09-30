@@ -29,9 +29,8 @@
 
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), "..")))
+import lsme.numeric.matchingresult as matchingresult
 
-import matchingresult
 import numpy as np
 
 class Granadaomega1MatchingResult(matchingresult.GenericMatchingResult):
