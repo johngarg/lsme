@@ -22,8 +22,8 @@ Example:
 from lsme.numeric import GranadaPi7MatchingResult as Pi7
 
 # Create an instance of the model and compute a coefficient
-# All massive params are in TeV
-pi7 = Pi7(scale=1.)
+# All massive params are in TeV, and initialised to 1 TeV
+pi7 = Pi7()
 
 # Coeffs are methods with the same name as you get from Matchmaker 
 # Flavour indices are 0-initialised
