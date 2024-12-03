@@ -1,6 +1,12 @@
 * LSME: The one-loop dictionary for the linear SM extensions
 
-=lsme= is a Python package that provides one-loop matching data for the linear SM extensions: multiplets generating dimension-6 operators at tree level in the Standard Model Effective Field Theory (SMEFT).  The package is organised into two submodules: one for retrieving numerical coefficients and another for searching a symbolic database.  The results presented here were calculated and compiled for the research project "Mapping the one-loop structure of linear SM extensions" (arXiv:24XX.XXXXX).
+=lsme= is a Python package that provides one-loop matching data for the linear
+SM extensions: multiplets generating dimension-6 operators at tree level in the
+Standard Model Effective Field Theory (SMEFT). The package is organised into two
+submodules: one for retrieving numerical coefficients and another for searching
+a symbolic database. The results presented here were calculated and compiled for
+the research project "Mapping the one-loop structure of linear SM extensions"
+([[https://arxiv.org/abs/2412.01759][arXiv:2412.01759]]).
 
 * Installation
 
