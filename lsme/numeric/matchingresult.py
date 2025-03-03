@@ -155,4 +155,7 @@ class GenericMatchingResult:
         return func(*zero_indexed_flavour_indices)
 
     def exotic_param_dims_dict(self):
-        return {key: np.array(value).shape for key, value in self.exotic_params.items()}
+        return {
+            param_string: np.array(getattr(self, param_string)).shape
+            for param_string in self.exotic_params
+        }
