@@ -33,6 +33,7 @@ class GranadaSMatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaSbar = 1
         self.kappaS3 = 1
         self.kappaS3bar = 1
+        self.exotic_params = ['MS', 'kappaS', 'kappaS3', 'kappaS3bar', 'kappaSbar', 'lambdaS', 'lambdaSbar']
         self.nonvanishing = ['alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHW', 'alphaOHWB', 'alphaOdH', 'alphaOeH', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOqd1', 'alphaOqd8', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOuH']
 
     def alphaO3G(self, ):

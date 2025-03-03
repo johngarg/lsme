@@ -29,6 +29,7 @@ class GranadaUMatchingResult(matchingresult.GenericMatchingResult):
         self.MU = 1
         self.lambdaU = np.ones((3))
         self.lambdaUbar = np.ones((3))
+        self.exotic_params = ['MU', 'lambdaU', 'lambdaUbar']
         self.nonvanishing = ['alphaO3G', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOHW', 'alphaOHWB', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOdW', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOuB', 'alphaOud1', 'alphaOud8', 'alphaOuG', 'alphaOuH', 'alphaOuu', 'alphaOuW']
 
     def alphaO3G(self, ):

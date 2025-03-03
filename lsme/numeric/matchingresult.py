@@ -18,6 +18,7 @@ class GenericMatchingResult:
     def __init__(self, name: str, scale: float = 1.0):
         self.name = name
         self.scale = scale
+        self.exotic_params = {}
 
         # See https://arxiv.org/abs/2112.10787 for more information about
         # specific couplings and constants
@@ -152,5 +153,5 @@ class GenericMatchingResult:
         func = getattr(self, f"alphaO{name}" if name != "llHH" else "alphaWeinberg")
         return func(*zero_indexed_flavour_indices)
 
-    def write_wcxf(self):
-        pass
+    def exotic_param_dims_dict(self):
+        return {key: np.array(value).shape for key, value in self.exotic_params.items()}

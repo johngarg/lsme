@@ -30,6 +30,7 @@ class GranadaS2MatchingResult(matchingresult.GenericMatchingResult):
         self.yS2bar = np.ones((3, 3))
         self.lambdaHatS2 = 1
         self.lambdaHatS2bar = 1
+        self.exotic_params = ['MS2', 'lambdaHatS2', 'lambdaHatS2bar', 'yS2', 'yS2bar']
         self.nonvanishing = ['alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOdd', 'alphaOeB', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHu', 'alphaOld', 'alphaOle', 'alphaOll', 'alphaOlq1', 'alphaOlu', 'alphaOqd1', 'alphaOqe', 'alphaOqq1', 'alphaOqu1', 'alphaOud1', 'alphaOuu']
 
     def alphaO3G(self, ):

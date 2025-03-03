@@ -28,6 +28,7 @@ class GranadaSigmaMatchingResult(matchingresult.GenericMatchingResult):
         self.MSigma = 1
         self.lambdaSigma = np.ones((3))
         self.lambdaSigmabar = np.ones((3))
+        self.exotic_params = ['MSigma', 'lambdaSigma', 'lambdaSigmabar']
         self.nonvanishing = ['alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHW', 'alphaOHWB', 'alphaWeinberg', 'alphaOdH', 'alphaOeB', 'alphaOeH', 'alphaOeW', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOuH']
 
     def alphaO3G(self, ):

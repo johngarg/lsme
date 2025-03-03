@@ -42,6 +42,7 @@ class GranadaPi7MatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaHatPi7bar = 1
         self.lambdaHatPrimePi7 = 1
         self.lambdaHatPrimePi7bar = 1
+        self.exotic_params = ['MPi7', 'lambdaHatPi7', 'lambdaHatPi7bar', 'lambdaHatPrimePi7', 'lambdaHatPrimePi7bar', 'yeqPi7', 'yeqPi7bar', 'yluPi7', 'yluPi7bar']
         self.nonvanishing = ['alphaO3G', 'alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOHW', 'alphaOHWB', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOdW', 'alphaOeB', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOeW', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOlequ3', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOuB', 'alphaOud1', 'alphaOud8', 'alphaOuG', 'alphaOuH', 'alphaOuu', 'alphaOuW']
 
     def alphaO3G(self, ):

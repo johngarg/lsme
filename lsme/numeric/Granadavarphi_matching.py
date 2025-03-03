@@ -48,6 +48,7 @@ class GranadavarphiMatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaHatvarphibar = 1
         self.lambdaHatPrimevarphi = 1
         self.lambdaHatPrimevarphibar = 1
+        self.exotic_params = ['Mvarphi', 'lambdaHatPrimevarphi', 'lambdaHatPrimevarphibar', 'lambdaHatvarphi', 'lambdaHatvarphibar', 'lambdavarphi', 'lambdavarphibar', 'yvarphid', 'yvarphidbar', 'yvarphie', 'yvarphiebar', 'yvarphiu', 'yvarphiubar']
         self.nonvanishing = ['alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHW', 'alphaOHWB', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOdW', 'alphaOeB', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOeW', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOlequ3', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOquqd8', 'alphaOuB', 'alphaOud1', 'alphaOud8', 'alphaOuG', 'alphaOuH', 'alphaOuu', 'alphaOuW']
 
     def alphaO3G(self, ):

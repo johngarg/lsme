@@ -44,6 +44,7 @@ class GranadaPhiMatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaHatPrimePhibar = 1
         self.lambdaHatPrimePrimePhi = 1
         self.lambdaHatPrimePrimePhibar = 1
+        self.exotic_params = ['MPhi', 'lambdaHatPhi', 'lambdaHatPhibar', 'lambdaHatPrimePhi', 'lambdaHatPrimePhibar', 'lambdaHatPrimePrimePhi', 'lambdaHatPrimePrimePhibar', 'ydqPhi', 'ydqPhibar', 'yquPhi', 'yquPhibar']
         self.nonvanishing = ['alphaO3G', 'alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOHW', 'alphaOHWB', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOdW', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOquqd8', 'alphaOuB', 'alphaOud1', 'alphaOud8', 'alphaOuG', 'alphaOuH', 'alphaOuu', 'alphaOuW']
 
     def alphaO3G(self, ):

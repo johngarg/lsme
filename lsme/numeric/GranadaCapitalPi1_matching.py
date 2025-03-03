@@ -36,6 +36,7 @@ class GranadaPi1MatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaHatPi1bar = 1
         self.lambdaHatPrimePi1 = 1
         self.lambdaHatPrimePi1bar = 1
+        self.exotic_params = ['MPi1', 'lambdaHatPi1', 'lambdaHatPi1bar', 'lambdaHatPrimePi1', 'lambdaHatPrimePi1bar', 'yPi1', 'yPi1bar']
         self.nonvanishing = ['alphaO3G', 'alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOHW', 'alphaOHWB', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOeB', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOeW', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOud1', 'alphaOud8', 'alphaOuH', 'alphaOuu']
 
     def alphaO3G(self, ):

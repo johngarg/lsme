@@ -34,6 +34,7 @@ class GranadaTheta3MatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaHatTheta3bar = 1
         self.lambdaHatPrimeTheta3 = 1
         self.lambdaHatPrimeTheta3bar = 1
+        self.exotic_params = ['MTheta3', 'lambdaHatPrimeTheta3', 'lambdaHatPrimeTheta3bar', 'lambdaHatTheta3', 'lambdaHatTheta3bar', 'lambdaTheta3', 'lambdaTheta3bar']
         self.nonvanishing = ['alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHW', 'alphaOHWB', 'alphaOdd', 'alphaOdH', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOld', 'alphaOle', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOud1', 'alphaOuH', 'alphaOuu']
 
     def alphaO3G(self, ):

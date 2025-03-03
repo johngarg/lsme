@@ -30,6 +30,7 @@ class GranadaXiMatchingResult(matchingresult.GenericMatchingResult):
         self.kappaXibar = 1
         self.lambdaXi = 1
         self.lambdaXibar = 1
+        self.exotic_params = ['MXi', 'kappaXi', 'kappaXibar', 'lambdaXi', 'lambdaXibar']
         self.nonvanishing = ['alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHW', 'alphaOdH', 'alphaOeH', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOll', 'alphaOlq3', 'alphaOqd1', 'alphaOqd8', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOuH']
 
     def alphaO3G(self, ):

@@ -29,6 +29,7 @@ class GranadaQ5MatchingResult(matchingresult.GenericMatchingResult):
         self.MQ5 = 1
         self.lambdaQ5 = np.ones((3))
         self.lambdaQ5bar = np.ones((3))
+        self.exotic_params = ['MQ5', 'lambdaQ5', 'lambdaQ5bar']
         self.nonvanishing = ['alphaO3G', 'alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOHWB', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOdW', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOud1', 'alphaOud8', 'alphaOuH', 'alphaOuu']
 
     def alphaO3G(self, ):

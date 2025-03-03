@@ -36,6 +36,7 @@ class GranadaUpsilonMatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaHatUpsilonbar = 1
         self.lambdaHatPrimeUpsilon = 1
         self.lambdaHatPrimeUpsilonbar = 1
+        self.exotic_params = ['MUpsilon', 'lambdaHatPrimeUpsilon', 'lambdaHatPrimeUpsilonbar', 'lambdaHatUpsilon', 'lambdaHatUpsilonbar', 'yUpsilon', 'yUpsilonbar']
         self.nonvanishing = ['alphaO3G', 'alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOHW', 'alphaOHWB', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOdW', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOld', 'alphaOle', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOuB', 'alphaOud1', 'alphaOud8', 'alphaOuG', 'alphaOuH', 'alphaOuu', 'alphaOuW']
 
     def alphaO3G(self, ):

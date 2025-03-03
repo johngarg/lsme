@@ -28,6 +28,7 @@ class GranadaDelta3MatchingResult(matchingresult.GenericMatchingResult):
         self.MDelta3 = 1
         self.lambdaDelta3 = np.ones((3))
         self.lambdaDelta3bar = np.ones((3))
+        self.exotic_params = ['MDelta3', 'lambdaDelta3', 'lambdaDelta3bar']
         self.nonvanishing = ['alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHWB', 'alphaOdd', 'alphaOdH', 'alphaOeB', 'alphaOed', 'alphaOee', 'alphaOeH', 'alphaOeu', 'alphaOeW', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOld', 'alphaOle', 'alphaOledq', 'alphaOlequ1', 'alphaOll', 'alphaOlq1', 'alphaOlq3', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOquqd1', 'alphaOud1', 'alphaOuH', 'alphaOuu']
 
     def alphaO3G(self, ):

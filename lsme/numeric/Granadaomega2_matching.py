@@ -32,6 +32,7 @@ class Granadaomega2MatchingResult(matchingresult.GenericMatchingResult):
         self.yomega2bar = np.ones((3, 3))
         self.lambdaHatomega2 = 1
         self.lambdaHatomega2bar = 1
+        self.exotic_params = ['Momega2', 'lambdaHatomega2', 'lambdaHatomega2bar', 'yomega2', 'yomega2bar']
         self.nonvanishing = ['alphaO3G', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOdB', 'alphaOdd', 'alphaOdG', 'alphaOdH', 'alphaOed', 'alphaOee', 'alphaOeu', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOld', 'alphaOle', 'alphaOll', 'alphaOlq1', 'alphaOlu', 'alphaOqd1', 'alphaOqd8', 'alphaOqe', 'alphaOqq1', 'alphaOqq3', 'alphaOqu1', 'alphaOqu8', 'alphaOud1', 'alphaOud8', 'alphaOuu']
 
     def alphaO3G(self, ):
