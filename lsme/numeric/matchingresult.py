@@ -19,6 +19,7 @@ class GenericMatchingResult:
         self.name = name
         self.scale = scale
         self.exotic_params = {}
+        self.sm_params = ['g1', 'g2', 'g3', 'mH', 'mZ', 'vev', 'yd', 'ydbar', 'yl', 'ylbar', 'yu', 'yubar']
 
         # See https://arxiv.org/abs/2112.10787 for more information about
         # specific couplings and constants
