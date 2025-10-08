@@ -69,6 +69,12 @@ class GenericMatchingResult:
             return 1
         return 0
 
+    def get_mass(self):
+        return getattr(self, f"M{self.name}")
+
+    def set_mass(self, val):
+        setattr(self, f"M{self.name}", val)
+
     def just_running(self, coeff: str, args: list[int] = []):
         """Return just the non-analytic part of the coefficient `coeff`. The
         method is called with the arguments passed to the list `args`.

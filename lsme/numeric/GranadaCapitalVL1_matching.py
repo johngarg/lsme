@@ -8,6 +8,8 @@
 # yubar
 # yu
 
+## 2025-10-08 JG: Copied by hand from 1711.10391v2
+
 import sys
 import os
 import numpy as np
@@ -82,8 +84,8 @@ class GranadaVL1MatchingResult(matchingresult.GenericMatchingResult):
         return 0
 
     def alphaOHW(self, ):
-        term_1 = - self.g1**2 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 8.0
-        term_2 = - self.g1 * self.gWVL1 *  self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
+        term_1 = - self.g2**2 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 8.0
+        term_2 = - self.g2 * self.gWVL1 *  self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
         return term_1 + term_2
 
     def alphaOHWB(self, ):
