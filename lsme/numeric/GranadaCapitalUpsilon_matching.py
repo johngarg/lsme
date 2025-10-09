@@ -20,12 +20,15 @@
 # g3
 # yu
 
-import python.matchingresult
+import sys
+import os
 import numpy as np
 
-class GranadaUpsilonMatchingResult(python.matchingresult.GenericMatchingResult):
-    def __init__(self, name='GranadaUpsilon', scale=1.0):
-        super().__init__(name, scale)
+import lsme.numeric.matchingresult as matchingresult
+
+class GranadaUpsilonMatchingResult(matchingresult.GenericMatchingResult):
+    def __init__(self, name='GranadaUpsilon'):
+        super().__init__(name)
         self.MUpsilon = 1
         self.yUpsilon = np.ones((3, 3))
         self.yUpsilonbar = np.ones((3, 3))
