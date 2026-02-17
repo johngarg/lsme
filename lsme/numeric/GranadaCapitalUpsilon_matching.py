@@ -36,6 +36,7 @@ class GranadaUpsilonMatchingResult(matchingresult.GenericMatchingResult):
         self.lambdaHatUpsilonbar = 1
         self.lambdaHatPrimeUpsilon = 1
         self.lambdaHatPrimeUpsilonbar = 1
+        self.exotic_params = ['MUpsilon', 'yUpsilon', 'yUpsilonbar', 'lambdaHatUpsilon', 'lambdaHatUpsilonbar', 'lambdaHatPrimeUpsilon', 'lambdaHatPrimeUpsilonbar']
         self.nonvanishing = ['alphaO3G', 'alphaO3W', 'alphaOH', 'alphaOHB', 'alphaOHBox', 'alphaOHD', 'alphaOHG', 'alphaOHW', 'alphaOHWB', 'alphaOddbar', 'alphaOeebar', 'alphaOHdbar', 'alphaOHebar', 'alphaOHl1bar', 'alphaOHl3bar', 'alphaOHq1bar', 'alphaOHq3bar', 'alphaOHubar', 'alphaOllbar', 'alphaOuubar', 'alphaOdB', 'alphaOdBbar', 'alphaOdd', 'alphaOdG', 'alphaOdGbar', 'alphaOdH', 'alphaOdHbar', 'alphaOdW', 'alphaOdWbar', 'alphaOed', 'alphaOedbar', 'alphaOee', 'alphaOeH', 'alphaOeHbar', 'alphaOeu', 'alphaOeubar', 'alphaOHd', 'alphaOHe', 'alphaOHl1', 'alphaOHl3', 'alphaOHq1', 'alphaOHq3', 'alphaOHu', 'alphaOHud', 'alphaOHudbar', 'alphaOld', 'alphaOldbar', 'alphaOle', 'alphaOlebar', 'alphaOll', 'alphaOlq1', 'alphaOlq1bar', 'alphaOlq3', 'alphaOlq3bar', 'alphaOlu', 'alphaOlubar', 'alphaOqd1', 'alphaOqd1bar', 'alphaOqd8', 'alphaOqd8bar', 'alphaOqe', 'alphaOqebar', 'alphaOqq1', 'alphaOqq1bar', 'alphaOqq3', 'alphaOqq3bar', 'alphaOqu1', 'alphaOqu1bar', 'alphaOqu8', 'alphaOqu8bar', 'alphaOuB', 'alphaOuBbar', 'alphaOud1', 'alphaOud1bar', 'alphaOud8', 'alphaOud8bar', 'alphaOuG', 'alphaOuGbar', 'alphaOuH', 'alphaOuHbar', 'alphaOuu', 'alphaOuW', 'alphaOuWbar']
 
     def alphaO3G(self, ):
