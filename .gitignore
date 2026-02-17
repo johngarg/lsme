@@ -1,4 +1,7 @@
 *.swp
+.DS_Store
+.pypirc
+symbolic/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
