@@ -208,25 +208,25 @@ class GranadaVL1MatchingResult(matchingresult.GenericMatchingResult):
         return 0
 
     def alphaOHd(self, mif1,mif2):
-        return - self.g1 * np.kron(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 6.0
+        return - self.g1 * self.kronecker_delta(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 6.0
 
     def alphaOHe(self, mif1,mif2):
-        return - self.g1 * np.kron(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 2.0
+        return - self.g1 * self.kronecker_delta(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 2.0
 
     def alphaOHl1(self, mif1,mif2):
-        return - self.g1 * np.kron(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
+        return - self.g1 * self.kronecker_delta(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
 
     def alphaOHl3(self, mif1,mif2):
-        return self.g2 * np.kron(mif1,mif2) * self.gWVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
+        return self.g2 * self.kronecker_delta(mif1,mif2) * self.gWVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
 
     def alphaOHq1(self, mif1,mif2):
-        return self.g1 * np.kron(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 12.0
+        return self.g1 * self.kronecker_delta(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 12.0
 
     def alphaOHq3(self, mif1,mif2):
-        return self.g2 * np.kron(mif1,mif2) * self.gWVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
+        return self.g2 * self.kronecker_delta(mif1,mif2) * self.gWVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 4.0
 
     def alphaOHu(self, mif1,mif2):
-        return self.g1 * np.kron(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 3.0
+        return self.g1 * self.kronecker_delta(mif1,mif2) * self.gBVL1 * self.gammaVL1 * self.gammaVL1bar * (self.MVL1)**(-4) / 3.0
 
     def alphaOHud(self, mif1,mif2):
         return 0
