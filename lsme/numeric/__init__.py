@@ -4,6 +4,7 @@ from .GranadaCapitalDelta1_matching import GranadaDelta1MatchingResult
 from .GranadaCapitalDelta3_matching import GranadaDelta3MatchingResult
 from .GranadaCapitalE_matching import GranadaEMatchingResult
 from .GranadaCapitalN_matching import GranadaNMatchingResult
+from .GranadaCapitalND_matching import GranadaNDMatchingResult
 from .GranadaCapitalOmega1_matching import GranadaOmega1MatchingResult
 from .GranadaCapitalOmega2_matching import GranadaOmega2MatchingResult
 from .GranadaCapitalOmega4_matching import GranadaOmega4MatchingResult
@@ -18,6 +19,7 @@ from .GranadaCapitalS2_matching import GranadaS2MatchingResult
 from .GranadaCapitalS_matching import GranadaSMatchingResult
 from .GranadaCapitalSigma1_matching import GranadaSigma1MatchingResult
 from .GranadaCapitalSigma_matching import GranadaSigmaMatchingResult
+from .GranadaCapitalSigmaD_matching import GranadaSigmaDMatchingResult
 from .GranadaCapitalT1_matching import GranadaT1MatchingResult
 from .GranadaCapitalT2_matching import GranadaT2MatchingResult
 from .GranadaCapitalTheta1_matching import GranadaTheta1MatchingResult
