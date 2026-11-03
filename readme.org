@@ -72,6 +72,49 @@ The two are not kept in sync: users replacing or editing the unbarred defaults
 with general complex matrices must also update the corresponding barred
 parameters.
 
+*** SM parameters at a scale
+
+=lsme.numeric.sm_running= gives Wilson's pure-SM \(\overline{\mathrm{MS}}\)
+parameters, evolved at one loop from \(M_Z\), at any scale from \(M_Z\) to
+1000 TeV:
+
+#+begin_src python
+from lsme.numeric.sm_running import wilson_sm_lagrangian
+
+sm = wilson_sm_lagrangian(5e4)  # scale in GeV
+sm["gs"], sm["Lambda"], sm["Gu"]
+#+end_src
+
+The values are those Wilson extracts for an empty set of SMEFT coefficients,
+=SMEFT(wcxf.WC("SMEFT", "Warsaw", mu, {})).C_in=, in Wilson's conventions and
+GeV units: \(\mathcal{L} \supset m_2\,\phi^\dagger\phi -
+\tfrac{\Lambda}{2}(\phi^\dagger\phi)^2 - (\bar q\,\Gamma_u u\,\tilde\phi +
+\bar q\,\Gamma_d d\,\phi + \bar l\,\Gamma_e e\,\phi + \mathrm{h.c.})\), with
+=Gu= carrying the CKM matrix in Wilson's down-aligned basis. They are not yet
+mapped to LSME conventions or used by the matching classes.
+
+A live Wilson extraction takes about 25 ms per scale and carries Wilson's
+per-scale integration noise. The module instead evaluates a least-squares
+Chebyshev fit in \(\ln\mu\), shipped as =lsme/numeric/data/sm_table.npz= and
+loaded at import, so a lookup takes tens of microseconds and varies smoothly
+with the scale. Its agreement with live Wilson extraction is limited by
+Wilson's integration tolerance (about \(10^{-4}\) relative, \(10^{-3}\)
+required), not by the fit. Scales outside \([M_Z, 1000\,\mathrm{TeV}]\) raise
+=ValueError=.
+
+The table records the Wilson version and a hash of Wilson's default SM inputs.
+If either differs from the installed Wilson, or the file cannot be read, a
+warning is issued and the table is rebuilt in memory (about 2 s); nothing is
+written to disk. After upgrading Wilson, regenerate and commit the table:
+
+#+begin_src sh
+python scripts/build_sm_table.py
+#+end_src
+
+Above about \(10^9\) GeV Wilson's own extraction drifts from accurate one-loop
+running because of its integration tolerance, and the one-loop Higgs quartic
+changes sign near \(10^8\) GeV; the table therefore stops at 1000 TeV.
+
 ** Symbolic Database
 
 The =lsme.symbolic= subpackage will provide a symbolic database that is searchable, allowing users to explore the matching data in a complementary way.  This is still under development.
