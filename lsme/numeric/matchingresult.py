@@ -5,16 +5,24 @@ from typing import List
 import numpy as np
 
 from wilson import wcxf
+from wilson.util import smeftutil
 
 from .sm_running import SM_PARAMETER_NAMES, sm_parameters
 
 GEV = 1e-3
+IDENTICAL_CURRENT_OPERATORS = ("ll", "qq1", "qq3", "uu", "dd", "ee")
 BARYON_VIOLATING_WARSAW_OPERATORS = frozenset({"duql", "duue", "qqql", "qque"})
+# MatchMaker uses D = partial - i g A; WCxf Warsaw uses partial + i g A.
+# A -> -A flips every operator containing an odd number of field strengths.
+ODD_FIELD_STRENGTH_OPERATORS = frozenset({
+    "uB", "uW", "uG", "dB", "dW", "dG", "eB", "eW",
+    "G", "Gtilde", "W", "Wtilde",
+})
 
 class GenericMatchingResult:
     """Class for storing MatchMaker matching results. Model parameters, direct
-    coefficient methods and coeff_dict use TeV units; to_wcxf exports in GeV
-    units.
+    coefficient methods and coeff_dict use TeV units and MatchMaker
+    conventions; to_wcxf converts to WCxf conventions and GeV units.
 
     Scale is initialised to 1 TeV and must lie between MZ and 1000 TeV. The
     SM parameters g1, g2, g3, lam, muH, yu, yd, yl and the barred Yukawas are
@@ -126,10 +134,11 @@ class GenericMatchingResult:
         return tree_level_result / loop_level_result
 
     def coeff_dict(self):
-        """Return baryon-conserving Warsaw coefficients in LSME TeV units.
+        """Return baryon-conserving MatchMaker coefficients with Warsaw keys.
 
-        Keys are WCxf Warsaw operator names, but values use the package's own
-        units: dimension-six coefficients in TeV**-2 and the dimension-five
+        Keys are WCxf Warsaw operator names, but values retain MatchMaker's
+        signs, full-flavour-sum normalisation and the package's own units:
+        dimension-six coefficients in TeV**-2 and the dimension-five
         Weinberg coefficients in TeV**-1, as returned by the alpha... methods.
         This is not WCxf input; use to_wcxf for Wilson and other WCxf tools.
 
@@ -148,16 +157,49 @@ class GenericMatchingResult:
         return coeff_dict_
 
     def to_wcxf(self):
-        """Return the coefficients of coeff_dict as a WCxf SMEFT Warsaw object.
+        """Return a WCxf SMEFT Warsaw object with converted conventions and units.
+
+        Average equivalent entries of each identical-current tensor before
+        Wilson's symmetric-array conversion supplies their multiplicities
+        (up to four for ee). Operators with an odd number of field strengths
+        change sign. The raw alpha... methods
+        and coeff_dict retain MatchMaker's conventions; see the README.
 
         Values are converted to WCxf units, GeV**-2 at dimension six and
         GeV**-1 for the Weinberg coefficients, and the scale to GeV. Use
         wilson.Wilson.from_wc(result.to_wcxf()) for running, or .dump() to
         write a WCxf file.
         """
+        coefficients = self.coeff_dict()
+        # These are full-sum coefficients, not non-redundant WCxf input:
+        # wcxf2arrays_symmetrized would divide by multiplicities too early.
+        arrays = smeftutil.wcxf2arrays(coefficients)
+        for op in IDENTICAL_CURRENT_OPERATORS:
+            # The generated formulas need not themselves obey current exchange
+            # or ee Fierz symmetry. Average the actual full tensor, rather than
+            # copying one representative to all equivalent entries.
+            method = getattr(self, self._warsaw_method(op)[0])
+            tensor = np.empty((3, 3, 3, 3), dtype=complex)
+            for indices in np.ndindex(tensor.shape):
+                key = op + "_" + "".join(str(i + 1) for i in indices)
+                tensor[indices] = (coefficients[key] if key in coefficients
+                                   else method(*indices))
+            tensor = (tensor + tensor.transpose(2, 3, 0, 1)) / 2
+            if op == "ee":
+                tensor = (tensor + tensor.transpose(2, 1, 0, 3)) / 2
+            arrays[op] = tensor
+        # Impose Hermiticity on the projected representatives (also removes
+        # roundoff-sized imaginary parts of coefficients declared real).
+        arrays = smeftutil.symmetrize(arrays)
+        for op in ODD_FIELD_STRENGTH_OPERATORS:
+            if op in arrays:
+                arrays[op] = -arrays[op]
+        # Wilson 2.5 also expects the unsupported BNV arrays to be present.
+        nonred = smeftutil.arrays2wcxf_nonred(smeftutil.add_missing(arrays))
+        # Wilson drops zeros; preserve this API's complete supported key set.
         values = {
-            op: self._wcxf_unit_factor(op) * coeff
-            for op, coeff in self.coeff_dict().items()
+            op: self._wcxf_unit_factor(op) * nonred.get(op, 0)
+            for op in coefficients
         }
         return wcxf.WC(
             eft="SMEFT",

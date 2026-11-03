@@ -36,7 +36,7 @@ pi7 = Pi7()
 coeff = pi7.alphaOdB(0,0)
 
 # Return a dictionary of all coefficients, keyed by WCxf Warsaw names
-# [arXiv:1712.05298] but in TeV units like the methods above
+# [arXiv:1712.05298] but with MatchMaker signs, normalisation and TeV units
 coeff_dict = pi7.coeff_dict()
 
 # Return a WCxf object in GeV units, with the scale converted to GeV,
@@ -46,9 +46,41 @@ w = Wilson.from_wc(pi7.to_wcxf())
 #+end_src
 
 Do not pass =coeff_dict()= directly to =wilson= or other WCxf tools: WCxf
-requires dimensionful coefficients and the scale in powers of GeV. Use
-=to_wcxf()=, which converts dimension-six coefficients by \(10^{-6}\) and the
-dimension-five Weinberg coefficients by \(10^{-3}\).
+requires its own operator conventions and coefficients and scale in powers
+of GeV. Use =to_wcxf()=: unit conversion alone is insufficient.
+
+*** WCxf conventions
+
+=coeff_dict()= and the =alpha...= methods retain MatchMaker's coefficients in
+TeV units. =to_wcxf()= converts their signs and full flavour sums to WCxf
+Warsaw, multiplies dimension-six coefficients by \(10^{-6}\) and the Weinberg
+coefficient by \(10^{-3}\), and converts the scale to GeV.
+
+For =ll=, =qq1=, =qq3=, =uu= and =dd=, the exporter evaluates all flavour
+entries and averages over interchange of the two currents. For =ee= it also
+averages over the Fierz-related entries. Wilson's =arrays2wcxf_nonred= then
+collects each symmetric tensor into the non-redundant basis. Its
+multiplicities are 1 or 2 for the first five families and 1, 2 or 4 for =ee=.
+The generated coefficients need not already have these symmetries: copying a
+single representative and multiplying it by its multiplicity is incorrect.
+For example, at unit mass and coupling the S2 tree coefficient =ee_1122=
+changes from 0.5 TeV^-2 to 2e-6 GeV^-2, while E's pure-gauge loop term
+proportional to =delta_pr delta_st= receives a factor 2, not 4.
+
+The covariant derivatives have opposite gauge signs: MatchMaker uses
+\(D=\partial-igA\), while WCxf Warsaw uses \(D=\partial+igA\).
+The field redefinition \(A\to-A\) maps the SM terms and sends each field
+strength to its negative. Consequently all eight dipoles and =G=, =Gtilde=,
+=W= and =Wtilde= change sign; the two-field-strength operators do not.
+See [[https://arxiv.org/abs/2112.10787][Matchmakereft, Appendix D]],
+[[https://arxiv.org/abs/1008.4884][Warsaw, Eqs. (2.2)-(2.4) and Section 4(iv)]],
+and the [[https://wcxf.github.io/assets/pdf/SMEFT.Warsaw.pdf][WCxf Warsaw definition]].
+The triple-field-strength conversion follows from these conventions; it has
+export regression coverage but no independent amplitude benchmark here.
+
+Previously exported WCxf files containing these operators need regeneration,
+and results obtained by running those files need recomputation. Changing the
+exporter does not repair previously saved Wilson runs.
 
 *** Barred parameters
 
@@ -156,8 +188,8 @@ tree-level matching vanishes, that the matching logarithms equal Wilson's
 one-loop SMEFT beta functions applied to the full tree-level coefficient
 vector. A coefficient is selected if its method vanishes at tree level
 structurally (every term carries =onelooporder=) and numerically (exactly 0 at
-several random points); the identical-current four-fermion families and entries
-far below the largest beta function are excluded. With generic complex
+several random points); entries far below the largest beta function are
+excluded. Identical-current families are included. With generic complex
 couplings the identity holds to about \(10^{-9}\) for D, \(\Delta_1\),
 \(\Delta_3\), E, \(N_D\), \(\Pi_1\), \(Q_1\), \(Q_5\), \(Q_7\), \(\Sigma_1\),
 \(\Sigma_D\), \(T_1\), \(T_2\), U and \(\Xi\). The tests also record:
@@ -166,20 +198,22 @@ couplings the identity holds to about \(10^{-9}\) for D, \(\Delta_1\),
   quartic at tree level, \(\lambda_{\rm EFT} = \lambda - \kappa_S^2/(2M_S^2)\),
   and the logs agree with Wilson only after this shift. Feeding the class
   Wilson's (EFT) quartic is therefore wrong at \(O(\kappa_S^2/M_S^2)\).
-- *Dipole operators* (=uB=, =uW=, =uG=, =dB=, ..., =eW=): in \(\Phi\), \(\Pi_7\)
-  and \(\varphi\) the exported logs are exactly minus Wilson's beta functions,
-  consistent with opposite signs of the gauge couplings in the covariant
-  derivative. =to_wcxf()= does not yet correct this sign. In \(\omega_1\) the
-  relation holds only with its diquark couplings switched off; with them on,
-  the dipole logs differ from minus Wilson's beta for reasons not yet
-  established.
-- *Identical-current four-fermion operators* (=ll=, =qq1=, =qq3=, =uu=, =dd=,
-  =ee=): these are exported with MatchMaker's symmetric full-sum
-  normalisation, whereas WCxf lists each distinct operator once. The required
-  conversion is operator- and index-dependent: factors of 1 or 2 for =ll=,
-  =qq1=, =qq3=, =uu= and =dd=, and 1, 2 or 4 for =ee=, which has an extra Fierz
-  symmetry. Applying Wilson's own symmetry factors restores agreement with its
-  beta functions. =to_wcxf()= does not yet apply them.
+- *Dipole operators:* after the sign conversion the exported logarithms
+  agree with Wilson for \(\Phi\), \(\Pi_7\) and \(\varphi\), and for all 36
+  nonzero dipole logarithms in \(\omega_1\) with its diquark couplings zero.
+  With nonzero diquark couplings a residual remains, including when
+  =yqqomega1= is symmetric; it is not cured by these export corrections.
+- *Identical-current four-fermion operators:* the exported logarithms now
+  agree after the full-tensor conversion. Wilson 2.5.2's raw =ee= beta tensor
+  is not Fierz-symmetric, although =arrays2wcxf_nonred= assumes it is. The
+  test projects this tensor before converting it. For example, with only
+  \(C_{\phi e}^{22}=1\) and \(g'=1\), the raw beta has =1122= and =2211= equal to -1/3
+  and =1221= and =2112= zero. Their single WCxf operator has total -2/3
+  (before the loop factor); converting the unprojected tensor gives -4/3.
+  Thus the old factor-four =ee= log checks were insufficient. This repair
+  does not change Wilson's own running/export implementation; its =ee=
+  endpoint needs separate care. All other tested families use its beta
+  tensor directly.
 - *Majorana N and \(\Sigma\):* the logs carry extra terms quartic in the heavy
   coupling, i.e. quadratic in the dimension-five coefficient, which Wilson's
   dimension-six beta functions do not include. The test checks this quartic

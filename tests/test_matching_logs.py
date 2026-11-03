@@ -10,8 +10,11 @@ their identity also needs the UV running of the heavy-field parameters.
 
 The tested coefficients are a selection: tree-level zero both structurally
 (every term of the method carries `onelooporder`) and numerically (exactly 0
-at several random points), excluding the identical-current four-fermion
-families and entries far below the largest beta function.
+at several random points), excluding entries far below the largest beta
+function.
+
+The redundant ee beta tensor is Fierz-projected before WCxf conversion;
+see wilson_beta for the Wilson 2.5.2 caveat.
 
 Both sides are built in Wilson's conventions: C^(0) and the logarithms go
 through `to_wcxf`, and the beta functions use the SM parameters the classes
@@ -30,8 +33,6 @@ from wilson.util import smeftutil
 from lsme import numeric
 from lsme.numeric.matchingresult import GEV
 
-# to_wcxf exports these with MatchMaker's symmetric full-sum normalisation,
-# not WCxf's; see test_identical_current_logs_match_after_symmetry_factors.
 IDENTICAL_CURRENT_OPERATORS = ("ll", "qq1", "qq3", "uu", "dd", "ee")
 DIPOLE_OPERATORS = ("dB", "dG", "dW", "uB", "uG", "uW", "eB", "eW")
 LOG_STEP = 0.1
@@ -95,7 +96,13 @@ def wilson_beta(result, tree, Lambda=None, Gu=None):
         "m2": -(result.muH**2).real / GEV**2,
         "Gu": result.yu if Gu is None else Gu, "Gd": result.yd, "Ge": result.yl,
     })
-    return smeftutil.arrays2wcxf_nonred({k: v / (16 * np.pi**2) for k, v in beta(C).items()})
+    running = {k: v / (16 * np.pi**2) for k, v in beta(C).items()}
+    # Wilson 2.5.2's raw ee beta is symmetric under current exchange but not
+    # under Fierz. arrays2wcxf_nonred assumes both. Project the redundant
+    # tensor before converting, so the test compares the same Lagrangian.
+    ee = running["ee"]
+    running["ee"] = (ee + ee.transpose(2, 1, 0, 3)) / 2
+    return smeftutil.arrays2wcxf_nonred(running)
 
 
 def _operands(node, ops):
@@ -164,7 +171,7 @@ def tree_zero_targets(cls):
     return structural
 
 
-def mismatches(result, Lambda=None, exclude=IDENTICAL_CURRENT_OPERATORS, rtol=1e-9, Gu=None):
+def mismatches(result, Lambda=None, exclude=(), rtol=1e-9, Gu=None):
     targets = tree_zero_targets(type(result))
     lhs = log_derivative(result)
     rhs = wilson_beta(result, tree_level(result), Lambda, Gu)
@@ -225,11 +232,9 @@ def test_singlet_scalar_logs_use_uv_quartic():
     ("E", ("ll",)), ("D", ("qq1", "qq3")), ("Q1", ("uu", "dd")),
     ("Delta1", ("ee",)), ("Delta3", ("ee",)),
 ])
-def test_identical_current_logs_match_after_symmetry_factors(name, operators):
-    # Multiplying the exported values by Wilson's own WCxf symmetry factors
-    # (1 or 2 for ll, qq1, qq3, uu, dd; 1, 2 or 4 for ee, which has an extra
-    # Fierz symmetry) restores agreement: the conversion the exporter lacks.
-    factors = {"ee": smeftutil._d_6}
+def test_identical_current_logs_match_wilson_beta(name, operators):
+    # Compare the exported logarithms directly; no correction in the test.
+    # Count permutation orbits to ensure all multiplicities are exercised.
     result = getattr(numeric, f"Granada{name}MatchingResult")()
     randomize(result, np.random.default_rng(5))
     targets = tree_zero_targets(type(result))
@@ -242,10 +247,12 @@ def test_identical_current_logs_match_after_symmetry_factors(name, operators):
         if op not in operators or abs(complex(rhs.get(k, 0))) < 1e-20:
             continue
         p, r, s_, t = (int(c) - 1 for c in indices)
-        factor = factors.get(op, smeftutil._d_4)[p, r, s_, t]
-        used.add(float(factor))
+        orbit = {(p, r, s_, t), (s_, t, p, r)}
+        if op == "ee":
+            orbit |= {(s_, r, p, t), (p, t, s_, r)}
+        used.add(len(orbit))
         checked += 1
-        assert complex(lhs[k]) * factor == pytest.approx(complex(rhs[k]), rel=1e-8)
+        assert complex(lhs[k]) == pytest.approx(complex(rhs[k]), rel=1e-8)
     assert checked >= 10
     assert used >= ({1.0, 2.0, 4.0} if "ee" in operators else {1.0, 2.0})
 
@@ -270,13 +277,18 @@ def test_up_yukawa_map_is_checked_by_logs(name, wrong_map, breaks):
 
 
 @pytest.mark.parametrize("name", ["Phi", "Pi7", "varphi"])
-def test_dipole_logs_are_minus_wilson_beta(name):
+def test_dipole_logs_match_wilson_beta(name):
     result = getattr(numeric, f"Granada{name}MatchingResult")()
     randomize(result, np.random.default_rng(5))
-    _, bad = mismatches(result)
-    assert bad and all(k.split("_")[0] in DIPOLE_OPERATORS for k in bad)
-    for a, b in bad.values():
-        assert a == pytest.approx(-b, rel=1e-9)
+    checked, bad = mismatches(result)
+    assert checked >= 20 and not bad
+    lhs = log_derivative(result)
+    rhs = wilson_beta(result, tree_level(result))
+    targets = [k for k in tree_zero_targets(type(result))
+               if k.split("_")[0] in DIPOLE_OPERATORS and abs(rhs.get(k, 0)) > 1e-20]
+    assert len(targets) >= 10
+    for k in targets:
+        assert lhs[k] == pytest.approx(rhs[k], rel=1e-8, abs=1e-22)
 
 
 @pytest.mark.parametrize("name", ["N", "Sigma"])
@@ -294,3 +306,49 @@ def test_majorana_logs_exceed_wilson_beta_at_quartic_order(name):
         return max(abs(a - b) for a, b in bad.values())
 
     assert discrepancy(0.5) / discrepancy(0.25) == pytest.approx(16, rel=0.05)
+
+
+def test_wilson_ee_beta_projection_preserves_the_operator_sum():
+    # With only C_phie^22=1 and g'=1, Wilson's raw beta has
+    # beta_1122 = beta_2211 = -1/3, beta_1221 = beta_2112 = 0.
+    # All four operators are equal; their total is -2/3, not -4/3.
+    result = numeric.GranadaEMatchingResult()
+    result.g1, result.g2, result.g3 = 1, 0, 0
+    result.yu = result.yd = result.yl = np.zeros((3, 3))
+    projected = wilson_beta(result, {"phie_22": 1})
+    assert projected["ee_1122"] == pytest.approx(-2 / (3 * 16 * np.pi**2))
+
+
+def test_omega1_dipole_logs_match_without_diquark_couplings():
+    result = numeric.Granadaomega1MatchingResult()
+    randomize(result, np.random.default_rng(5))
+    for name in ("yqqomega1", "yduomega1"):
+        setattr(result, name, np.zeros((3, 3)))
+        setattr(result, name + "bar", np.zeros((3, 3)))
+    lhs = log_derivative(result)
+    rhs = wilson_beta(result, tree_level(result))
+    checked = 0
+    for key, value in lhs.items():
+        if key.split("_")[0] not in DIPOLE_OPERATORS:
+            continue
+        expected = rhs.get(key, 0)
+        if max(abs(value), abs(expected)) > 1e-20:
+            checked += 1
+        assert value == pytest.approx(expected, rel=1e-8, abs=1e-22)
+    assert checked == 36
+
+
+def test_omega1_diquark_residual_persists_with_symmetric_coupling():
+    # Diagnostic of an unresolved matching/running discrepancy, not an
+    # expected physical identity. Neither the exporter correction nor the
+    # required yqq flavour symmetry fixes the diquark contribution.
+    result = numeric.Granadaomega1MatchingResult()
+    randomize(result, np.random.default_rng(5))
+    result.yqqomega1 = (result.yqqomega1 + result.yqqomega1.T) / 2
+    result.yqqomega1bar = result.yqqomega1.conjugate()
+    lhs = log_derivative(result)
+    rhs = wilson_beta(result, tree_level(result))
+    assert abs(rhs["dG_33"]) > 1e-12
+    assert lhs["dG_33"] == pytest.approx(-2 * rhs["dG_33"], rel=1e-8, abs=1e-22)
+    for key in ("eB_33", "eW_33"):
+        assert lhs[key] == pytest.approx(rhs[key], rel=1e-8, abs=1e-22)
