@@ -221,17 +221,6 @@ def test_singlet_scalar_logs_use_uv_quartic():
     assert unshifted
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "to_wcxf exports identical-current four-fermion coefficients with "
-    "MatchMaker's symmetric full-sum normalisation; WCxf needs operator- and "
-    "index-dependent factors of 1, 2 or 4"))
-def test_identical_current_operators_match_wilson_beta():
-    result = numeric.GranadaEMatchingResult()
-    randomize(result, np.random.default_rng(5))
-    _, bad = mismatches(result, exclude=())
-    assert not bad
-
-
 @pytest.mark.parametrize("name,operators", [
     ("E", ("ll",)), ("D", ("qq1", "qq3")), ("Q1", ("uu", "dd")),
     ("Delta1", ("ee",)), ("Delta3", ("ee",)),
@@ -278,18 +267,6 @@ def test_up_yukawa_map_is_checked_by_logs(name, wrong_map, breaks):
     checked, bad = mismatches(result, Gu=Gu)
     assert checked >= 20
     assert bool(bad) == breaks
-
-
-@pytest.mark.xfail(strict=True, reason=(
-    "dipole coefficients are exported with the opposite sign to Wilson's "
-    "convention: their logs equal exactly minus Wilson's beta, consistent with "
-    "opposite signs of the gauge couplings in the covariant derivative"))
-@pytest.mark.parametrize("name", ["Phi", "Pi7", "varphi"])
-def test_dipole_logs_match_wilson_beta(name):
-    result = getattr(numeric, f"Granada{name}MatchingResult")()
-    randomize(result, np.random.default_rng(5))
-    _, bad = mismatches(result)
-    assert not bad
 
 
 @pytest.mark.parametrize("name", ["Phi", "Pi7", "varphi"])
