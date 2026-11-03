@@ -11,8 +11,9 @@ MZ = 91.1876 * GEV
 BARYON_VIOLATING_WARSAW_OPERATORS = frozenset({"duql", "duue", "qqql", "qque"})
 
 class GenericMatchingResult:
-    """Class for storing MatchMaker matching results. Model parameters and direct
-    coefficient methods use TeV units; coeff_dict exports in GeV units.
+    """Class for storing MatchMaker matching results. Model parameters, direct
+    coefficient methods and coeff_dict use TeV units; to_wcxf exports in GeV
+    units.
     Scale is initialised to 1 TeV.
     Gauge and Yukawa defaults are fixed full-SM MS-bar inputs at MZ;
     changing scale does not evolve these inputs.
@@ -134,16 +135,16 @@ class GenericMatchingResult:
         return tree_level_result / loop_level_result
 
     def coeff_dict(self):
-        """Return baryon-conserving Warsaw coefficients in WCxf GeV units.
+        """Return baryon-conserving Warsaw coefficients in LSME TeV units.
 
-        Dimension-six coefficients are in GeV**-2; the dimension-five
-        Weinberg coefficients are in GeV**-1. The unsupported baryon-violating
-        operator families are omitted, independently of WCxf's sector names.
-        Other missing coefficient methods raise AttributeError.
+        Keys are WCxf Warsaw operator names, but values use the package's own
+        units: dimension-six coefficients in TeV**-2 and the dimension-five
+        Weinberg coefficients in TeV**-1, as returned by the alpha... methods.
+        This is not WCxf input; use to_wcxf for Wilson and other WCxf tools.
 
-        Direct alpha... methods and self.scale retain TeV units. Pass this
-        dictionary directly to Wilson with scale=self.scale / GEV; do not
-        apply another coefficient-unit conversion.
+        The unsupported baryon-violating operator families are omitted,
+        independently of WCxf's sector names. Other missing coefficient
+        methods raise AttributeError.
         """
         sectors = wcxf.Basis["SMEFT", "Warsaw"].sectors
         coeff_dict_ = {}
@@ -151,14 +152,37 @@ class GenericMatchingResult:
             for op in ops:
                 if op.split("_", 1)[0] in BARYON_VIOLATING_WARSAW_OPERATORS:
                     continue
-                coeff_dict_[op] = self._get_wc_in_wcxf(op)
+                coeff_dict_[op] = self._get_warsaw_coeff(op)
 
         return coeff_dict_
 
-    def _get_wc_in_wcxf(self, op: str):
-        """Map one Warsaw operator to its coefficient in GeV units."""
+    def to_wcxf(self):
+        """Return the coefficients of coeff_dict as a WCxf SMEFT Warsaw object.
+
+        Values are converted to WCxf units, GeV**-2 at dimension six and
+        GeV**-1 for the Weinberg coefficients, and the scale to GeV. Use
+        wilson.Wilson.from_wc(result.to_wcxf()) for running, or .dump() to
+        write a WCxf file.
+        """
+        values = {
+            op: self._wcxf_unit_factor(op) * coeff
+            for op, coeff in self.coeff_dict().items()
+        }
+        return wcxf.WC(
+            eft="SMEFT",
+            basis="Warsaw",
+            scale=self.scale / GEV,
+            values=wcxf.WC.dict2values(values),
+        )
+
+    @staticmethod
+    def _wcxf_unit_factor(op: str):
+        """Return the TeV-to-GeV factor for one Warsaw coefficient."""
+        return GEV if op.split("_", 1)[0] == "llphiphi" else GEV**2
+
+    def _get_warsaw_coeff(self, op: str):
+        """Map one Warsaw operator to its coefficient in TeV units."""
         name, *flavour = op.split("_")
-        unit_factor = GEV if name == "llphiphi" else GEV**2
         zero_indexed_flavour_indices = [int(i)-1 for i in flavour[0]] if flavour else []
         name = name.replace("phi", "H").replace("tilde", "t")
         wcxf_mme_map = {
@@ -173,7 +197,7 @@ class GenericMatchingResult:
             name = wcxf_mme_map[name]
 
         func = getattr(self, f"alphaO{name}" if name != "llHH" else "alphaWeinberg")
-        return unit_factor * func(*zero_indexed_flavour_indices)
+        return func(*zero_indexed_flavour_indices)
 
     def exotic_param_dims_dict(self):
         return {

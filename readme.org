@@ -35,9 +35,20 @@ pi7 = Pi7()
 # Flavour indices are 0-initialised
 coeff = pi7.alphaOdB(0,0)
 
-# Return a dictionary of all coefficients in WCxf [arXiv:1712.05298]
+# Return a dictionary of all coefficients, keyed by WCxf Warsaw names
+# [arXiv:1712.05298] but in TeV units like the methods above
 coeff_dict = pi7.coeff_dict()
+
+# Return a WCxf object in GeV units, with the scale converted to GeV,
+# e.g. for running with wilson
+from wilson import Wilson
+w = Wilson.from_wc(pi7.to_wcxf())
 #+end_src
+
+Do not pass =coeff_dict()= directly to =wilson= or other WCxf tools: WCxf
+requires dimensionful coefficients and the scale in powers of GeV. Use
+=to_wcxf()=, which converts dimension-six coefficients by \(10^{-6}\) and the
+dimension-five Weinberg coefficients by \(10^{-3}\).
 
 ** Symbolic Database
 

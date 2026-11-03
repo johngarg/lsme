@@ -87,6 +87,7 @@ def test_prime_prime_public_interface():
     assert "lambdaHatPrimePrimevarphi" in result.exotic_params
     assert "lambdaHatPrimePrimevarphibar" in result.exotic_params
     assert isinstance(result.coeff_dict(), dict)
+    result.to_wcxf().validate()
 
 
 @pytest.mark.parametrize("point", [0, 1])

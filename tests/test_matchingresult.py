@@ -33,15 +33,15 @@ def test_coeff_dict():
     from wilson import wcxf
 
     zeta = Zeta()
-    coeff_dict_ = zeta.coeff_dict()
+    wc = zeta.to_wcxf()
 
-    my_wilson = wilson.Wilson(coeff_dict_, scale=1e3, eft='SMEFT', basis='Warsaw')
+    my_wilson = wilson.Wilson.from_wc(wc)
     # Validate the whole coeff dict
     my_wilson.wc.validate()
 
     # Replace just with one value for testing
-    dict_ = {"lq3_1111": coeff_dict_["lq3_1111"]}
-    my_wilson = wilson.Wilson(dict_, scale=1e3, eft='SMEFT', basis='Warsaw')
+    dict_ = {"lq3_1111": wc.dict["lq3_1111"]}
+    my_wilson = wilson.Wilson(dict_, scale=wc.scale, eft='SMEFT', basis='Warsaw')
 
     # Run down to 160 GeV and fish out second-gen operator coeff which should
     # now be non-zero
