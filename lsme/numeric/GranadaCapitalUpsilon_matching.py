@@ -27,7 +27,7 @@ import numpy as np
 import lsme.numeric.matchingresult as matchingresult
 
 class GranadaUpsilonMatchingResult(matchingresult.GenericMatchingResult):
-    def __init__(self, name='GranadaUpsilon'):
+    def __init__(self, name='Upsilon'):
         super().__init__(name)
         self.MUpsilon = 1
         self.yUpsilon = np.ones((3, 3))
