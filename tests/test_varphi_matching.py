@@ -26,14 +26,19 @@ BASELINE_PATH = Path(__file__).with_name("varphi_zero_coupling_baseline.json")
 
 
 def configure_baseline_point(result, point):
+    # Explicit SM inputs, assigned after the scale so that setting the scale
+    # does not overwrite them. lam and muH keep the values the baseline was
+    # recorded with, when they were derived from mH and vev.
+    mH = 0.126 + 0.001 * point
+    vev = 0.247 + 0.001 * point
     scalars = {
         "Mvarphi": 2.3 + 0.4 * point,
         "scale": 1.1 + 0.2 * point,
         "g1": 0.31 + 0.01 * point,
         "g2": 0.59 + 0.02 * point,
         "g3": 1.07 + 0.03 * point,
-        "mH": 0.126 + 0.001 * point,
-        "vev": 0.247 + 0.001 * point,
+        "lam": mH**2 / (2 * vev**2),
+        "muH": np.sqrt(mH**2 / 2),
         "invepsilonbar": 0.13 + 0.02 * point,
         "epsilonbar": -0.07 + 0.01 * point,
         "onelooporder": 1,

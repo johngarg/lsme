@@ -66,41 +66,74 @@ pi7.ydbar = pi7.yd.conjugate()
 pi7.ylbar = pi7.yl.conjugate()
 #+end_src
 
-The default Yukawa matrices are real and diagonal, and the initialiser sets each
-barred matrix to the conjugate of its unbarred counterpart, as a separate array.
-The two are not kept in sync: users replacing or editing the unbarred defaults
-with general complex matrices must also update the corresponding barred
+The initialiser sets each barred matrix to the conjugate of its unbarred
+counterpart, as a separate array. The two are not kept in sync: users replacing
+or editing the unbarred matrices must also update the corresponding barred
 parameters.
 
-*** SM parameters at a scale
+*** SM parameters and the matching scale
 
-=lsme.numeric.sm_running= gives Wilson's pure-SM \(\overline{\mathrm{MS}}\)
-parameters, evolved at one loop from \(M_Z\), at any scale from \(M_Z\) to
-1000 TeV:
+The SM parameters =g1=, =g2=, =g3=, =lam=, =muH=, =yu=, =yd=, =yl= and the
+barred Yukawas are Wilson's pure-SM \(\overline{\mathrm{MS}}\) values at the
+matching scale =scale= (in TeV, default 1 TeV), run at one loop from \(M_Z\).
+Setting =scale= reloads all of them:
 
 #+begin_src python
-from lsme.numeric.sm_running import wilson_sm_lagrangian
-
-sm = wilson_sm_lagrangian(5e4)  # scale in GeV
-sm["gs"], sm["Lambda"], sm["Gu"]
+pi7 = Pi7()
+pi7.scale = 50.0           # SM couplings now at 50 TeV
+pi7.g3 = 0.9               # custom inputs go after the scale
 #+end_src
 
-The values are those Wilson extracts for an empty set of SMEFT coefficients,
-=SMEFT(wcxf.WC("SMEFT", "Warsaw", mu, {})).C_in=, in Wilson's conventions and
-GeV units: \(\mathcal{L} \supset m_2\,\phi^\dagger\phi -
-\tfrac{\Lambda}{2}(\phi^\dagger\phi)^2 - (\bar q\,\Gamma_u u\,\tilde\phi +
-\bar q\,\Gamma_d d\,\phi + \bar l\,\Gamma_e e\,\phi + \mathrm{h.c.})\), with
-=Gu= carrying the CKM matrix in Wilson's down-aligned basis. They are not yet
-mapped to LSME conventions or used by the matching classes.
+- The scale must lie between \(M_Z\) and 1000 TeV; other values raise
+  =ValueError= and leave the object unchanged.
+- Setting =scale= overwrites manual SM inputs, so set those after the scale.
+  Manual SM inputs affect matching only: =to_wcxf()= does not pass them to
+  Wilson, which uses its own SM parameters when running.
+- =just_running(coeff, args, reference_scale=None)= returns the explicit-log
+  part at fixed couplings: the coefficient at the current scale minus its value
+  at =reference_scale= (default: the model mass), with the SM couplings held at
+  their current values. Models with several masses must pass =reference_scale=.
 
-A live Wilson extraction takes about 25 ms per scale and carries Wilson's
-per-scale integration noise. The module instead evaluates a least-squares
-Chebyshev fit in \(\ln\mu\), shipped as =lsme/numeric/data/sm_table.npz= and
-loaded at import, so a lookup takes tens of microseconds and varies smoothly
-with the scale. Its agreement with live Wilson extraction is limited by
-Wilson's integration tolerance (about \(10^{-4}\) relative, \(10^{-3}\)
-required), not by the fit. Scales outside \([M_Z, 1000\,\mathrm{TeV}]\) raise
-=ValueError=.
+The map from Wilson's conventions,
+\(\mathcal{L} \supset m_2\,\phi^\dagger\phi - \tfrac{\Lambda}{2}(\phi^\dagger\phi)^2
+- (\bar q\,\Gamma_u u\,\tilde\phi + \bar q\,\Gamma_d d\,\phi + \bar l\,\Gamma_e e\,\phi
++ \mathrm{h.c.})\), to LSME's MatchMaker conventions,
+\(\mathcal{L} \supset -\mu_H^2 H^\dagger H - \lambda (H^\dagger H)^2 - (y_d \bar Q D H
++ y_l \bar L E H + y_u \bar Q U \tilde H + \mathrm{h.c.})\), is
+
+| LSME                      | Wilson                                  |
+|---------------------------+-----------------------------------------|
+| =g1=, =g2=, =g3=          | =gp=, =g=, =gs=                         |
+| =lam=                     | =Lambda / 2=                            |
+| =muH**2=                  | =-m2= (GeV\(^2\) → TeV\(^2\))           |
+| =yu=, =yd=, =yl=          | =Gu=, =Gd=, =Ge= (same index order)     |
+| =yubar=, =ydbar=, =ylbar= | complex conjugates of =Gu=, =Gd=, =Ge= |
+
+Wilson's =m2= is positive, so =muH= is imaginary,
+\(\mu_H = i\sqrt{m_2}\). The classes only use =(self.muH)**(2)=, which is then
+exactly real and negative, so coefficients that depend on it are complex numbers
+with zero imaginary part. The Higgs and Yukawa maps agree with the
+MatchMakerEFT-to-Matchete conversion in Matchete's E_VLL example. =Gu= carries
+the CKM matrix in Wilson's down-aligned basis, so =yu= is not diagonal.
+
+The parameters are Wilson's extraction for an empty set of SMEFT coefficients;
+Wilson's extraction with nonzero coefficients differs by
+\(O(v^2 C^{(6)})\), beyond the retained order. One-loop SM running is a
+reasonable partner for one-loop matching, but not a uniform error bound:
+quartic-dependent and cancellation-sensitive coefficients can have larger
+truncation errors.
+
+**** Lookup table
+
+=lsme.numeric.sm_running.wilson_sm_lagrangian(scale_gev)= returns Wilson's raw
+parameters and =sm_parameters(scale_tev)= the mapped ones. A live Wilson
+extraction takes about 25 ms per scale and carries Wilson's per-scale
+integration noise. The module instead evaluates a least-squares Chebyshev fit
+in \(\ln\mu\), shipped as =lsme/numeric/data/sm_table.npz= and loaded at import,
+so setting the scale takes tens of microseconds and the couplings vary smoothly
+with it. Its agreement with live Wilson extraction is limited by Wilson's
+integration tolerance (about \(10^{-4}\) relative, \(10^{-3}\) required), not by
+the fit.
 
 The table records the Wilson version and a hash of Wilson's default SM inputs.
 If either differs from the installed Wilson, or the file cannot be read, a
@@ -114,6 +147,37 @@ python scripts/build_sm_table.py
 Above about \(10^9\) GeV Wilson's own extraction drifts from accurate one-loop
 running because of its integration tolerance, and the one-loop Higgs quartic
 changes sign near \(10^8\) GeV; the table therefore stops at 1000 TeV.
+
+**** Consistency with Wilson's running
+
+=tests/test_matching_logs.py= checks, for coefficients whose tree-level matching
+vanishes identically, that the matching logarithms equal Wilson's one-loop
+SMEFT beta functions applied to the full tree-level coefficient vector. With
+generic complex couplings this holds to about \(10^{-9}\) for D, \(\Delta_1\),
+\(\Delta_3\), E, \(N_D\), \(\Pi_1\), \(Q_1\), \(Q_5\), \(Q_7\), \(\Sigma_1\),
+\(\Sigma_D\), \(T_1\), \(T_2\), U and \(\Xi\). The tests also record:
+
+- *Singlet scalar S:* =lam= is the UV quartic. The trilinear shifts the EFT
+  quartic at tree level, \(\lambda_{\rm EFT} = \lambda - \kappa_S^2/(2M_S^2)\),
+  and the logs agree with Wilson only after this shift. Feeding the class
+  Wilson's (EFT) quartic is therefore wrong at \(O(\kappa_S^2/M_S^2)\).
+- *Dipole operators* (=uB=, =uW=, =uG=, =dB=, ..., =eW=): the exported logs are
+  exactly minus Wilson's beta functions, consistent with opposite signs of the
+  gauge couplings in the covariant derivative. =to_wcxf()= does not yet correct
+  this sign.
+- *Identical-current four-fermion operators* (=ll=, =qq1=, =qq3=, =uu=, =dd=,
+  =ee=): entries with \((pr) \ne (st)\) are exported with the full-sum
+  normalisation; WCxf lists each distinct operator once, so they need a factor
+  2. =to_wcxf()= does not yet apply it.
+- *Majorana N and \(\Sigma\):* the logs carry extra terms quadratic in the
+  dimension-five coefficient, which Wilson's dimension-six beta functions do
+  not include.
+
+Vector models (tree level only) and models whose couplings need a flavour
+symmetry (S1, S2, \(\Upsilon\), \(\Xi_1\), \(\Omega_2\), \(\Omega_4\),
+\(\omega_2\), \(\omega_4\), \(\zeta\)) are not covered by this check. Whether
+the SM couplings in each formula are UV or EFT parameters at one loop
+(threshold and wavefunction corrections) is not settled by it.
 
 ** Symbolic Database
 

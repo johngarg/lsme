@@ -6,51 +6,34 @@ import numpy as np
 
 from wilson import wcxf
 
+from .sm_running import SM_PARAMETER_NAMES, sm_parameters
+
 GEV = 1e-3
-MZ = 91.1876 * GEV
 BARYON_VIOLATING_WARSAW_OPERATORS = frozenset({"duql", "duue", "qqql", "qque"})
 
 class GenericMatchingResult:
     """Class for storing MatchMaker matching results. Model parameters, direct
     coefficient methods and coeff_dict use TeV units; to_wcxf exports in GeV
     units.
-    Scale is initialised to 1 TeV.
-    Gauge and Yukawa defaults are fixed full-SM MS-bar inputs at MZ;
-    changing scale does not evolve these inputs.
+
+    Scale is initialised to 1 TeV and must lie between MZ and 1000 TeV. The
+    SM parameters g1, g2, g3, lam, muH, yu, yd, yl and the barred Yukawas are
+    Wilson's pure-SM MS-bar values at the scale, run at one loop from MZ (see
+    lsme.numeric.sm_running for the conventions; muH is imaginary). Setting
+    scale reloads all of them, overwriting manual values, so set custom SM
+    inputs after the scale. Manual SM inputs affect matching only; to_wcxf
+    does not pass them to Wilson.
 
     """
 
     def __init__(self, name: str, scale: float = 1.0):
         self.name = name
-        self.scale = scale
         self.exotic_params = {}
-        self.sm_params = ['g1', 'g2', 'g3', 'mH', 'mZ', 'vev', 'yd', 'ydbar', 'yl', 'ylbar', 'yu', 'yubar']
+        self.sm_params = list(SM_PARAMETER_NAMES)
 
         # See https://arxiv.org/abs/2112.10787 for more information about
         # specific couplings and constants
-
-        vev_gev: float = 246
-        self.vev: float = vev_gev * GEV
-
-        # Full-SM MS-bar gauge and Yukawa inputs at MZ, Huang and Zhou,
-        # Tables II, III and V: https://inspirehep.net/files/71930f37457ebd10742e55c2b36531ea
-        # The tabulated masses are in GeV and obey m_f = y_f * v_F / sqrt(2),
-        # with v_F = 246 GeV.
-        self.yu: np.matrix = np.sqrt(2) * np.diag([0.00123, 0.620, 168.26]) / vev_gev
-        self.yd: np.matrix = np.sqrt(2) * np.diag([0.00267, 0.05316, 2.839]) / vev_gev
-        self.yl: np.matrix = np.sqrt(2) * np.diag([0.00048307, 0.101766, 1.72856]) / vev_gev
-
-        # Barred matrices are component-wise conjugates, held as separate arrays
-        self.yubar: np.matrix = np.conjugate(self.yu)
-        self.ydbar: np.matrix = np.conjugate(self.yd)
-        self.ylbar: np.matrix = np.conjugate(self.yl)
-
-        self.mZ: float = MZ
-        self.mH: float = 125.10 * GEV
-
-        self.g1: float = 0.357254  # U(1)_Y, without GUT normalization
-        self.g2: float = 0.65100   # SU(2)_L
-        self.g3: float = 1.2104    # SU(3)_c
+        self.scale = scale
 
         # Constants
         self.iCPV: int = 1  # Fixes \eps_{0123} sign convention
@@ -61,16 +44,20 @@ class GenericMatchingResult:
         self.xRP: float = 1 # Reading-point parameter
 
     @property
-    def muH(self):
-        return np.sqrt(self.mH**2 / 2)
+    def scale(self):
+        return self._scale
 
-    @property
-    def lam(self):
-        return self.mH**2 / (2 * self.vev**2)
+    @scale.setter
+    def scale(self, value):
+        # Look up first, so an invalid scale leaves the object unchanged.
+        parameters = sm_parameters(value)
+        self._scale = float(value)
+        for name, parameter in parameters.items():
+            setattr(self, name, parameter)
 
     @property
     def mu(self):
-        return self.scale
+        return self._scale
 
     def kronecker_delta(self, i, j):
         if i == j:
@@ -83,30 +70,28 @@ class GenericMatchingResult:
     def set_mass(self, val):
         setattr(self, f"M{self.name}", val)
 
-    def just_running(self, coeff: str, args: list[int] = []):
-        """Return just the non-analytic part of the coefficient `coeff`. The
-        method is called with the arguments passed to the list `args`.
+    def just_running(self, coeff: str, args: list[int] = [], reference_scale=None):
+        """Return the explicit-log part of the coefficient `coeff` at fixed
+        couplings: its value at the current scale minus its value at
+        `reference_scale` (default: the model mass), with the SM couplings
+        held at their current values. The method is called with the arguments
+        passed to the list `args`. Models with several masses must pass
+        `reference_scale`; one reference scale cannot remove every mass
+        logarithm.
 
         """
-        # Save the initial value of the scale
-        initial_scale = self.scale
-
-        # Set scale to the mass to kill running contribution
-        self.scale = getattr(self, f"M{self.name}")
-
-        # Extract method into a function
+        if reference_scale is None:
+            reference_scale = getattr(self, f"M{self.name}")
         func = getattr(self, coeff)
+        initial_scale = self._scale
+        try:
+            # Assign _scale directly so the couplings stay frozen
+            self._scale = float(reference_scale)
+            matching = func(*args)
+        finally:
+            self._scale = initial_scale
 
-        # Isolate the matching part
-        matching = func(*args)
-
-        # Reset scale to initial value
-        self.scale = initial_scale
-
-        # Subtract matching from total result to isolate the running
-        running = func(*args) - matching
-
-        return running
+        return func(*args) - matching
 
     def ratio_tree_loop(self, coeff: str, args: list[int] = []):
         """Returns the ratio between the tree-level part and loop-level part

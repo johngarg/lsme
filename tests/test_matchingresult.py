@@ -13,8 +13,10 @@ def test_generic_matching_result_initialization():
     # Check default scale is 1.0
     assert result.scale == 1.0
 
-    # Check e.g. that vev is present
-    assert result.vev
+    # Check that the SM parameters are loaded at the scale
+    for name in result.sm_params:
+        assert hasattr(result, name)
+    assert result.g3 > 0 and result.lam > 0
 
 def test_ratio_tree_loop():
     zeta = Zeta()
