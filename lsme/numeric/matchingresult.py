@@ -12,6 +12,8 @@ MZ = 91.1876 * GEV
 class GenericMatchingResult:
     """Class for storing MatchMaker matching results. All dimensionful quantities
     are in TeV. Scale is initialised to 1 TeV.
+    Gauge and Yukawa defaults are fixed full-SM MS-bar inputs at MZ;
+    changing scale does not evolve these inputs.
 
     """
 
@@ -27,11 +29,13 @@ class GenericMatchingResult:
         vev_gev: float = 246
         self.vev: float = vev_gev * GEV
 
-        # SM couplings and parameters
-        # Values taken from https://inspirehep.net/files/71930f37457ebd10742e55c2b36531ea
-        self.yu: np.matrix = np.diag([0.00123, 0.620, 168.26]) / vev_gev
-        self.yd: np.matrix = np.diag([0.00267, 0.05316, 2.839]) / vev_gev
-        self.yl: np.matrix = np.diag([0.00048307, 0.101766, 1.72856]) / vev_gev
+        # Full-SM MS-bar gauge and Yukawa inputs at MZ, Huang and Zhou,
+        # Tables II, III and V: https://inspirehep.net/files/71930f37457ebd10742e55c2b36531ea
+        # The tabulated masses are in GeV and obey m_f = y_f * v_F / sqrt(2),
+        # with v_F = 246 GeV.
+        self.yu: np.matrix = np.sqrt(2) * np.diag([0.00123, 0.620, 168.26]) / vev_gev
+        self.yd: np.matrix = np.sqrt(2) * np.diag([0.00267, 0.05316, 2.839]) / vev_gev
+        self.yl: np.matrix = np.sqrt(2) * np.diag([0.00048307, 0.101766, 1.72856]) / vev_gev
 
         self.yubar: np.matrix = self.yu
         self.ydbar: np.matrix = self.yd
@@ -40,9 +44,9 @@ class GenericMatchingResult:
         self.mZ: float = MZ
         self.mH: float = 125.10 * GEV
 
-        self.g1: float = 0.65100
-        self.g2: float = 0.357254
-        self.g3: float = 1.204
+        self.g1: float = 0.357254  # U(1)_Y, without GUT normalization
+        self.g2: float = 0.65100   # SU(2)_L
+        self.g3: float = 1.2104    # SU(3)_c
 
         # Constants
         self.iCPV: int = 1  # Fixes \eps_{0123} sign convention
