@@ -1,0 +1,79 @@
+{
+  "baseline_commit": "67cebeb779a8a7e83114826e5791a16445665ac9",
+  "all_flavours": true,
+  "checks": 39528,
+  "max_absolute_error": 2.779024842816778e-16,
+  "failures": [],
+  "models": [
+    {
+      "model": "GranadaCapitalOmega1",
+      "methods": 6,
+      "checks": 3888
+    },
+    {
+      "model": "GranadaCapitalOmega2",
+      "methods": 1,
+      "checks": 648
+    },
+    {
+      "model": "GranadaCapitalOmega4",
+      "methods": 1,
+      "checks": 648
+    },
+    {
+      "model": "GranadaCapitalPhi",
+      "methods": 6,
+      "checks": 3888
+    },
+    {
+      "model": "GranadaCapitalPi1",
+      "methods": 1,
+      "checks": 648
+    },
+    {
+      "model": "GranadaCapitalPi7",
+      "methods": 4,
+      "checks": 2592
+    },
+    {
+      "model": "GranadaCapitalS1",
+      "methods": 1,
+      "checks": 648
+    },
+    {
+      "model": "GranadaCapitalUpsilon",
+      "methods": 4,
+      "checks": 2592
+    },
+    {
+      "model": "GranadaCapitalXi1",
+      "methods": 1,
+      "checks": 648
+    },
+    {
+      "model": "Granadaomega1",
+      "methods": 11,
+      "checks": 7128
+    },
+    {
+      "model": "Granadaomega2",
+      "methods": 1,
+      "checks": 648
+    },
+    {
+      "model": "Granadaomega4",
+      "methods": 2,
+      "checks": 1296
+    },
+    {
+      "model": "Granadavarphi",
+      "methods": 18,
+      "checks": 11664
+    },
+    {
+      "model": "Granadazeta",
+      "methods": 4,
+      "checks": 2592
+    }
+  ]
+}

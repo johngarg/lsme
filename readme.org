@@ -190,6 +190,17 @@ symmetry (S1, S2, \(\Upsilon\), \(\Xi_1\), \(\Omega_2\), \(\Omega_4\),
 \(\omega_2\), \(\omega_4\), \(\zeta\)) are not covered by this check. Whether
 the SM couplings in each formula are UV or EFT parameters at one loop
 (threshold and wavefunction corrections) is not settled by it.
+*** Finite regulator contributions
+
+The numerical expressions cancel products of =epsilonbar= and =invepsilonbar=
+before evaluation. Their default values of zero therefore retain the finite
+regulator-times-pole contributions while dropping remaining poles and positive
+regulator powers. No extra numerical finite-part correction is needed.
+
+The 14 affected classes were regenerated from saved matching results, preserving
+later matching corrections and the current class interfaces. See the
+[[file:docs/finite-matching-regeneration.md][regeneration and validation record]] for source provenance,
+reproduction commands, and the independent finite-part checks.
 
 ** Symbolic Database
 
