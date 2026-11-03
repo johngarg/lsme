@@ -1,0 +1,2 @@
+# Preserve the upstream Mathematica result byte-for-byte, including line-end spaces.
+tools/matching_inputs/Upsilon/MatchingResult.dat whitespace=-blank-at-eol

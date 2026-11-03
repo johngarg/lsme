@@ -1,0 +1,261 @@
+{
+  "baseline_commit": "67cebeb779a8a7e83114826e5791a16445665ac9",
+  "parser_commit": "19374b57069443c8607b5e35490a398a3b236e83",
+  "reference_commit": "0732710e43a208ccf38d2a44db7704b84e7eaafc",
+  "models": [
+    {
+      "model": "GranadaCapitalOmega1",
+      "file": "GranadaCapitalOmega1_matching.py",
+      "class": "GranadaOmega1MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/15",
+      "config_sha256": "945f6f8ecbeda76f2741f5cdc30712349ab4a79fcd267e7dac189904f63db3f2",
+      "matching_data_sha256": "44b45e40090328458857dcb0dca5d8bef92302bae7b187fff7fc153f17aed883",
+      "baseline_sha256": "862468e8fe534008e081f70bff2fc222581e7a9b0276e3a0cf7bbb5114358458",
+      "changed_methods": [
+        "alphaOqq1",
+        "alphaOqq3",
+        "alphaOquqd1",
+        "alphaOquqd8",
+        "alphaOud1",
+        "alphaOud8"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "6634c8ecd70e3eee2c7d3a43da215b8f1d6867189ac5394bdb0bcf52c9deaf99"
+    },
+    {
+      "model": "GranadaCapitalOmega2",
+      "file": "GranadaCapitalOmega2_matching.py",
+      "class": "GranadaOmega2MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/16",
+      "config_sha256": "b54600321ccf403f76800a4d86905d85d75e8d7131247a902aa74f8d82620957",
+      "matching_data_sha256": "ba7589fdc2b39734ca37599ba944b1679cd561b230cf9bd8922e4b0cdda772f8",
+      "baseline_sha256": "f291eeeb47af46103733bf194ad0a597260774cecefc0df2ad56a46182d3c8eb",
+      "changed_methods": [
+        "alphaOdd"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "b53252ff28e37c1ec6718252146e66551e836b5e6cd1a3ce16190352951437f9"
+    },
+    {
+      "model": "GranadaCapitalOmega4",
+      "file": "GranadaCapitalOmega4_matching.py",
+      "class": "GranadaOmega4MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/17",
+      "config_sha256": "8a3f7bb6f97a21d67dcdf6b8ef7f157dc249fb1884adfc2d18860c3e8581ada7",
+      "matching_data_sha256": "3623d5216418aa928d502f055ce9c2924f96f466bd8c904c190833f43076430e",
+      "baseline_sha256": "9d1a66704d279cdf07c8d29189d405ac5ad20067349cfcbe4c46fbc922c3f74d",
+      "changed_methods": [
+        "alphaOuu"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "e5e77744d3ac28e755485d8c2d9a0a52b40ab97b3836a53068817512752cb646"
+    },
+    {
+      "model": "GranadaCapitalPhi",
+      "file": "GranadaCapitalPhi_matching.py",
+      "class": "GranadaPhiMatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/19",
+      "config_sha256": "fd47a11cb6c17466ed86bc334555801eb7ea1cbd5d95e5d6a8abb1d8fec7b79c",
+      "matching_data_sha256": "8c4c3b308ad19879877e1ba3dd9feaae2e9e07c93ce1b45613ad25f11216d953",
+      "baseline_sha256": "5260d54b82ba15f97937f5a2f7bee81169e76ac2be87e8519ce43a7b02482964",
+      "changed_methods": [
+        "alphaOqd1",
+        "alphaOqd8",
+        "alphaOqu1",
+        "alphaOqu8",
+        "alphaOquqd1",
+        "alphaOquqd8"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "6a69be1e806e2bd31939441e25c7b228e9276363c5989dc5a5959298ce50c5bb"
+    },
+    {
+      "model": "GranadaCapitalPi1",
+      "file": "GranadaCapitalPi1_matching.py",
+      "class": "GranadaPi1MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/12",
+      "config_sha256": "3a3ee2ef3c53fbe3727f611ff0b2f1106b76a02e206a165c512ebfc16c68f2f1",
+      "matching_data_sha256": "36b8caf0f0852b71b895aa9e7be9e9c6faca0251a9ab8929c4f970106e400034",
+      "baseline_sha256": "75bd3e00529f6afffb166d0ec72a79d924346f1c034329cad76de853d436dc6b",
+      "changed_methods": [
+        "alphaOld"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "0b3b323dbc25cc5378f76906d2209914c0f2938e6d1260c8374ed39ba9794797"
+    },
+    {
+      "model": "GranadaCapitalPi7",
+      "file": "GranadaCapitalPi7_matching.py",
+      "class": "GranadaPi7MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/13",
+      "config_sha256": "8659c66b3c55df556220107f4da0af2eaa4998416ba26c7750c200a04be73fc8",
+      "matching_data_sha256": "fc8cd3e2019b69ad7bc4fedf878373d262d38269658511ae727b1663f377d90c",
+      "baseline_sha256": "58474d653b1deec319b6ceeb62685a9802361aadb3e00d5810fddc3cde602564",
+      "changed_methods": [
+        "alphaOlequ1",
+        "alphaOlequ3",
+        "alphaOlu",
+        "alphaOqe"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "9ae571fc8ed49f4acb796c7f848e2c6a3829c6e6ff38e77bcb24cb18db0596d6"
+    },
+    {
+      "model": "GranadaCapitalS1",
+      "file": "GranadaCapitalS1_matching.py",
+      "class": "GranadaS1MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/2",
+      "config_sha256": "d434d4d0e7b02cdda56bee06bee2ce51cfe4b7cdf8861b0fb3163fb6dbe0c11d",
+      "matching_data_sha256": "11672d65559258c7db5d843e1cd62d3e509deb0aa91487e7a23a5495dc17d2db",
+      "baseline_sha256": "131b5b954074b2d562e055d6d653cff4cd168cd54fa70bd6c7b3adf15f7b0048",
+      "changed_methods": [
+        "alphaOll"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "4b76087848b0f6d785b0760c890d0769ae1ad51ebe47457d933d5820ce4f7d8f"
+    },
+    {
+      "model": "GranadaCapitalUpsilon",
+      "file": "GranadaCapitalUpsilon_matching.py",
+      "class": "GranadaUpsilonMatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/lsme/tools/matching_inputs/Upsilon",
+      "config_sha256": "da8c09a69c2940831f36b672f0f85e70e28a384c190f1b7f84efbb1bd2fbfd19",
+      "matching_data_sha256": "3ef4cc1bca4b831e3d8085d88417835b3f6d775943ab95cacd68db863a1611bd",
+      "baseline_sha256": "16a6f2617642fb70bdc43c93647db642bff122f17ac538fb23718a43309c103c",
+      "changed_methods": [
+        "alphaOqq1",
+        "alphaOqq1bar",
+        "alphaOqq3",
+        "alphaOqq3bar"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "0a44062c6bbad87226a58c067a8978e4732d48049a9571188cabffc0e244380a"
+    },
+    {
+      "model": "GranadaCapitalXi1",
+      "file": "GranadaCapitalXi1_matching.py",
+      "class": "GranadaXi1MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/6",
+      "config_sha256": "e4be854fda965b53d69a951977e1f7cb6f3ad40c0541fc232bd8332118f2c0ee",
+      "matching_data_sha256": "9ed866173f1697692ae046e483296ab5308d01185eb1a6467dbb6c256b4d3683",
+      "baseline_sha256": "b128bad98f3a8510755e4bfaf094b34bdf32c685040ad19a333395d2a6efe6aa",
+      "changed_methods": [
+        "alphaOll"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "8e75d779ebfe3991076b9dc08d0b0f1642e79c3610bf27fc19a02c59e46a1bd7"
+    },
+    {
+      "model": "Granadaomega1",
+      "file": "Granadaomega1_matching.py",
+      "class": "Granadaomega1MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/9",
+      "config_sha256": "ca463351576ba1fad253b8aac483262d88b432e7647bc7402a8156b4440e54e6",
+      "matching_data_sha256": "edbd6fa164c41b8e7304bd64dce6c5a6e0f42158894e5493debb5740660e7aa7",
+      "baseline_sha256": "71c66b888bb6ab9f739b73b8c98ff5d6ee5f07d402701cfb4214ffd71fb87b23",
+      "changed_methods": [
+        "alphaOeu",
+        "alphaOlequ1",
+        "alphaOlequ3",
+        "alphaOlq1",
+        "alphaOlq3",
+        "alphaOqq1",
+        "alphaOqq3",
+        "alphaOquqd1",
+        "alphaOquqd8",
+        "alphaOud1",
+        "alphaOud8"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "bd32e674eb0ce64d6c7e6388f43ff8a0bc14adf1ca8d5a27a15eaa9d3046e2b7"
+    },
+    {
+      "model": "Granadaomega2",
+      "file": "Granadaomega2_matching.py",
+      "class": "Granadaomega2MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/10",
+      "config_sha256": "47cf642f763920b68c4d6331c25b7bdebdb9733f255b570b4ec520f2b6aeb352",
+      "matching_data_sha256": "14ab9fc6072f6f4f7cef892b28f3d97b5bcd9176685a6ea9fbae789fbee83f18",
+      "baseline_sha256": "2d1f19fff3d6d959096ddcd690be6c04df4581fcbe31cba37b50110f932e0728",
+      "changed_methods": [
+        "alphaOdd"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "3a3fe858494d57c0ccd7e9df528583377ae5a6c9d987dbe85180f9b1695c06c3"
+    },
+    {
+      "model": "Granadaomega4",
+      "file": "Granadaomega4_matching.py",
+      "class": "Granadaomega4MatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/11",
+      "config_sha256": "c743a637f633f1f72f4ab961bd118e461fafa32cf5f4d279ea90842c62231238",
+      "matching_data_sha256": "7f0d11a87ff421dad263b7dcda346d00d35a3623e0e98359e74f498e878512ad",
+      "baseline_sha256": "cf869c5b7595223f22aae8e3dbf50660ffeb80a2b18de976fa50c01a16dbe62a",
+      "changed_methods": [
+        "alphaOed",
+        "alphaOuu"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "d87105b5e74d611956344964fc63bd196385812d9668de0f38b36a15d3fe2572"
+    },
+    {
+      "model": "Granadavarphi",
+      "file": "Granadavarphi_matching.py",
+      "class": "GranadavarphiMatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/4",
+      "config_sha256": "b63fd33faf4a9a9922b616ca553be9eea69c4342714a2afcc36799c218944a7b",
+      "matching_data_sha256": "04267842499b65696f915e9faf76022eb1a90722c1b7428f8282aa35a63c253f",
+      "baseline_sha256": "d246fd12461e88ca6a7f5f3233ccb382e6515a000c1ed859a976ccdd86fb3e8b",
+      "changed_methods": [
+        "alphaOle",
+        "alphaOlebar",
+        "alphaOledq",
+        "alphaOledqbar",
+        "alphaOlequ1",
+        "alphaOlequ1bar",
+        "alphaOqd1",
+        "alphaOqd1bar",
+        "alphaOqd8",
+        "alphaOqd8bar",
+        "alphaOqu1",
+        "alphaOqu1bar",
+        "alphaOqu8",
+        "alphaOqu8bar",
+        "alphaOquqd1",
+        "alphaOquqd1bar",
+        "alphaOquqd8",
+        "alphaOquqd8bar"
+      ],
+      "preserved_overlays": [
+        "alphaOH",
+        "alphaOHBox",
+        "alphaOHD",
+        "alphaOdH",
+        "alphaOdHbar",
+        "alphaOeH",
+        "alphaOeHbar",
+        "alphaOuH",
+        "alphaOuHbar"
+      ],
+      "candidate_sha256": "633906c11d07eaa4225376b356e57775f6e7bd2de7f218b6447b2d257df16469"
+    },
+    {
+      "model": "Granadazeta",
+      "file": "Granadazeta_matching.py",
+      "class": "GranadazetaMatchingResult",
+      "source": "/Users/johngargalionis/Projects/wproj/archive/one-loop-dict/linear-one-loop-dict-ref/results/14",
+      "config_sha256": "8b222da2aa91e5d1e78fee003b9011ffedce5774bf01ecb241c2fe0ca942d979",
+      "matching_data_sha256": "23f37da29e3365cdbd827906d4b6e4313b6301b04ab464bd06f60549d7b0c3bf",
+      "baseline_sha256": "37f6f9fb5b3f0529cfb49457997e71d409a828d92aca79f90f4601b4d76a21eb",
+      "changed_methods": [
+        "alphaOlq1",
+        "alphaOlq3",
+        "alphaOqq1",
+        "alphaOqq3"
+      ],
+      "preserved_overlays": [],
+      "candidate_sha256": "1b0aec3d4ac253abafd07af3341f8e890beeb439dac3b430b8e3113c98239c89"
+    }
+  ],
+  "changed_method_count": 61
+}
