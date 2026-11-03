@@ -175,6 +175,23 @@ def test_just_running_accepts_explicit_reference_scale():
     assert result.just_running("alphaOuH", [2, 2], reference_scale=4.0) == expected
 
 
+@pytest.mark.parametrize("reference", [np.nan, np.inf, -np.inf, 0.0, -2.0])
+def test_just_running_rejects_invalid_reference_scale(reference):
+    result = S()
+    state = _state(result)
+    with pytest.raises(ValueError):
+        result.just_running("alphaOuH", [2, 2], reference_scale=reference)
+    _assert_same_state(result, state)
+
+
+def test_just_running_accepts_reference_outside_table():
+    # The reference scale only enters logarithms, so it need not lie in the
+    # table's range.
+    result = S()
+    result.kappaS = result.kappaSbar = 0.5
+    assert np.isfinite(result.just_running("alphaOuH", [2, 2], reference_scale=5000.0))
+
+
 @pytest.mark.performance
 def test_setting_scale_is_fast():
     result = GenericMatchingResult("Test")

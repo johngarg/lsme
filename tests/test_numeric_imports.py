@@ -37,3 +37,11 @@ def test_generic_matching_result_import_and_instantiate():
     instance = module.GenericMatchingResult(name="TestModel")
 
     assert instance.name == "TestModel"
+
+
+@pytest.mark.parametrize("module_name", MODULE_NAMES)
+def test_exotic_params_name_real_attributes(module_name):
+    for cls in _matching_classes(module_name):
+        instance = cls()
+        missing = [name for name in instance.exotic_params if not hasattr(instance, name)]
+        assert not missing, f"{cls.__name__} lists missing parameters {missing}"

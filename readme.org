@@ -111,8 +111,9 @@ The map from Wilson's conventions,
 
 Wilson's =m2= is positive, so =muH= is imaginary,
 \(\mu_H = i\sqrt{m_2}\). The classes only use =(self.muH)**(2)=, which is then
-exactly real and negative, so coefficients that depend on it are complex numbers
-with zero imaginary part. The Higgs and Yukawa maps agree with the
+exactly real and negative. This does not make coefficients real in general:
+they are complex whenever other inputs are, e.g. through the CKM phase in
+=yu=. The Higgs and Yukawa maps agree with the
 MatchMakerEFT-to-Matchete conversion in Matchete's E_VLL example. =Gu= carries
 the CKM matrix in Wilson's down-aligned basis, so =yu= is not diagonal.
 
@@ -150,10 +151,14 @@ changes sign near \(10^8\) GeV; the table therefore stops at 1000 TeV.
 
 **** Consistency with Wilson's running
 
-=tests/test_matching_logs.py= checks, for coefficients whose tree-level matching
-vanishes identically, that the matching logarithms equal Wilson's one-loop
-SMEFT beta functions applied to the full tree-level coefficient vector. With
-generic complex couplings this holds to about \(10^{-9}\) for D, \(\Delta_1\),
+=tests/test_matching_logs.py= checks, for a selection of coefficients whose
+tree-level matching vanishes, that the matching logarithms equal Wilson's
+one-loop SMEFT beta functions applied to the full tree-level coefficient
+vector. A coefficient is selected if its method vanishes at tree level
+structurally (every term carries =onelooporder=) and numerically (exactly 0 at
+several random points); the identical-current four-fermion families and entries
+far below the largest beta function are excluded. With generic complex
+couplings the identity holds to about \(10^{-9}\) for D, \(\Delta_1\),
 \(\Delta_3\), E, \(N_D\), \(\Pi_1\), \(Q_1\), \(Q_5\), \(Q_7\), \(\Sigma_1\),
 \(\Sigma_D\), \(T_1\), \(T_2\), U and \(\Xi\). The tests also record:
 
@@ -161,17 +166,24 @@ generic complex couplings this holds to about \(10^{-9}\) for D, \(\Delta_1\),
   quartic at tree level, \(\lambda_{\rm EFT} = \lambda - \kappa_S^2/(2M_S^2)\),
   and the logs agree with Wilson only after this shift. Feeding the class
   Wilson's (EFT) quartic is therefore wrong at \(O(\kappa_S^2/M_S^2)\).
-- *Dipole operators* (=uB=, =uW=, =uG=, =dB=, ..., =eW=): the exported logs are
-  exactly minus Wilson's beta functions, consistent with opposite signs of the
-  gauge couplings in the covariant derivative. =to_wcxf()= does not yet correct
-  this sign.
+- *Dipole operators* (=uB=, =uW=, =uG=, =dB=, ..., =eW=): in \(\Phi\), \(\Pi_7\)
+  and \(\varphi\) the exported logs are exactly minus Wilson's beta functions,
+  consistent with opposite signs of the gauge couplings in the covariant
+  derivative. =to_wcxf()= does not yet correct this sign. In \(\omega_1\) the
+  relation holds only with its diquark couplings switched off; with them on,
+  the dipole logs differ from minus Wilson's beta for reasons not yet
+  established.
 - *Identical-current four-fermion operators* (=ll=, =qq1=, =qq3=, =uu=, =dd=,
-  =ee=): entries with \((pr) \ne (st)\) are exported with the full-sum
-  normalisation; WCxf lists each distinct operator once, so they need a factor
-  2. =to_wcxf()= does not yet apply it.
-- *Majorana N and \(\Sigma\):* the logs carry extra terms quadratic in the
-  dimension-five coefficient, which Wilson's dimension-six beta functions do
-  not include.
+  =ee=): these are exported with MatchMaker's symmetric full-sum
+  normalisation, whereas WCxf lists each distinct operator once. The required
+  conversion is operator- and index-dependent: factors of 1 or 2 for =ll=,
+  =qq1=, =qq3=, =uu= and =dd=, and 1, 2 or 4 for =ee=, which has an extra Fierz
+  symmetry. Applying Wilson's own symmetry factors restores agreement with its
+  beta functions. =to_wcxf()= does not yet apply them.
+- *Majorana N and \(\Sigma\):* the logs carry extra terms quartic in the heavy
+  coupling, i.e. quadratic in the dimension-five coefficient, which Wilson's
+  dimension-six beta functions do not include. The test checks this quartic
+  scaling only, not the explicit Weinberg-squared contributions.
 
 Vector models (tree level only) and models whose couplings need a flavour
 symmetry (S1, S2, \(\Upsilon\), \(\Xi_1\), \(\Omega_2\), \(\Omega_4\),

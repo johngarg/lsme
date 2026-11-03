@@ -22,8 +22,9 @@ conventions and TeV units:
 
 Wilson's m2 is positive, so muH**2 is negative and `muH` is imaginary,
 muH = 1j * sqrt(m2). The matching classes only use (self.muH)**(2), which is
-then exactly real and negative; coefficients containing it are complex numbers
-with zero imaginary part. The Higgs-mass and Yukawa maps agree with the
+then exactly real and negative. That does not make coefficients real in
+general: they are complex whenever other inputs are, e.g. through the CKM
+phase in yu. The Higgs-mass and Yukawa maps agree with the
 MatchMakerEFT-to-Matchete conversion in Matchete's E_VLL example
 (mu^2 → −mu^2, lambda → lambda/2, Yukawas unchanged), whose Matchete SM
 Lagrangian has Wilson's form. Gu carries the CKM matrix in Wilson's

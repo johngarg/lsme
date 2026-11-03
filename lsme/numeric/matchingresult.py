@@ -82,11 +82,16 @@ class GenericMatchingResult:
         """
         if reference_scale is None:
             reference_scale = getattr(self, f"M{self.name}")
+        reference_scale = float(reference_scale)
+        # No table lookup happens here, so only finiteness and positivity
+        # are required, not the table's range.
+        if not np.isfinite(reference_scale) or reference_scale <= 0:
+            raise ValueError(f"Reference scale must be finite and positive, got {reference_scale}")
         func = getattr(self, coeff)
         initial_scale = self._scale
         try:
             # Assign _scale directly so the couplings stay frozen
-            self._scale = float(reference_scale)
+            self._scale = reference_scale
             matching = func(*args)
         finally:
             self._scale = initial_scale
@@ -166,8 +171,10 @@ class GenericMatchingResult:
         """Return the TeV-to-GeV factor for one Warsaw coefficient."""
         return GEV if op.split("_", 1)[0] == "llphiphi" else GEV**2
 
-    def _get_warsaw_coeff(self, op: str):
-        """Map one Warsaw operator to its coefficient in TeV units."""
+    @staticmethod
+    def _warsaw_method(op: str):
+        """Return the coefficient method name and zero-indexed flavour
+        indices for one Warsaw operator."""
         name, *flavour = op.split("_")
         zero_indexed_flavour_indices = [int(i)-1 for i in flavour[0]] if flavour else []
         name = name.replace("phi", "H").replace("tilde", "t")
@@ -182,8 +189,13 @@ class GenericMatchingResult:
         if name in wcxf_mme_map:
             name = wcxf_mme_map[name]
 
-        func = getattr(self, f"alphaO{name}" if name != "llHH" else "alphaWeinberg")
-        return func(*zero_indexed_flavour_indices)
+        method = f"alphaO{name}" if name != "llHH" else "alphaWeinberg"
+        return method, zero_indexed_flavour_indices
+
+    def _get_warsaw_coeff(self, op: str):
+        """Map one Warsaw operator to its coefficient in TeV units."""
+        method, indices = self._warsaw_method(op)
+        return getattr(self, method)(*indices)
 
     def exotic_param_dims_dict(self):
         return {
