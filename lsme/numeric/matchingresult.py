@@ -40,9 +40,10 @@ class GenericMatchingResult:
         self.yd: np.matrix = np.sqrt(2) * np.diag([0.00267, 0.05316, 2.839]) / vev_gev
         self.yl: np.matrix = np.sqrt(2) * np.diag([0.00048307, 0.101766, 1.72856]) / vev_gev
 
-        self.yubar: np.matrix = self.yu
-        self.ydbar: np.matrix = self.yd
-        self.ylbar: np.matrix = self.yl
+        # Barred matrices are component-wise conjugates, held as separate arrays
+        self.yubar: np.matrix = np.conjugate(self.yu)
+        self.ydbar: np.matrix = np.conjugate(self.yd)
+        self.ylbar: np.matrix = np.conjugate(self.yl)
 
         self.mZ: float = MZ
         self.mH: float = 125.10 * GEV

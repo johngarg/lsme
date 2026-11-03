@@ -45,3 +45,17 @@ def test_yukawas_reproduce_mz_running_masses(coupling, masses_gev):
     np.testing.assert_allclose(
         getattr(result, coupling + "bar"), yukawa.conjugate(), rtol=0, atol=0
     )
+
+
+@pytest.mark.parametrize("coupling", ["yu", "yd", "yl"])
+def test_barred_yukawas_do_not_share_storage(coupling):
+    result = GenericMatchingResult("SMInputs")
+    yukawa = getattr(result, coupling)
+    barred = getattr(result, coupling + "bar")
+    barred_before = barred.copy()
+
+    # An in-place edit of the unbarred matrix must not leak into its
+    # barred partner without conjugation.
+    assert not np.shares_memory(yukawa, barred)
+    yukawa[0, 1] = 0.1
+    np.testing.assert_array_equal(barred, barred_before)
