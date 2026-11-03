@@ -50,6 +50,28 @@ requires dimensionful coefficients and the scale in powers of GeV. Use
 =to_wcxf()=, which converts dimension-six coefficients by \(10^{-6}\) and the
 dimension-five Weinberg coefficients by \(10^{-3}\).
 
+*** Barred parameters
+
+Parameter names ending in =bar= denote complex conjugation. For matrix-valued
+parameters, the flavour indices retain the same order; in particular,
+\(\mathtt{ybar}_{ij} = (\mathtt{y}_{ij})^*\), not
+\(\mathtt{ybar} = \mathtt{y}^\dagger\). Any transpose needed in a Hermitian
+contraction is encoded by the explicit index ordering in the matching
+expressions. Thus, for general complex Yukawa matrices, set the barred
+parameters with component-wise conjugation:
+
+#+begin_src python
+pi7.yubar = pi7.yu.conjugate()
+pi7.ydbar = pi7.yd.conjugate()
+pi7.ylbar = pi7.yl.conjugate()
+#+end_src
+
+The default Yukawa matrices are real and diagonal, and the initialiser sets each
+barred matrix to the conjugate of its unbarred counterpart, as a separate array.
+The two are not kept in sync: users replacing or editing the unbarred defaults
+with general complex matrices must also update the corresponding barred
+parameters.
+
 ** Symbolic Database
 
 The =lsme.symbolic= subpackage will provide a symbolic database that is searchable, allowing users to explore the matching data in a complementary way.  This is still under development.
