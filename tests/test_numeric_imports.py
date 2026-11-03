@@ -7,7 +7,13 @@ from pathlib import Path
 import pytest
 
 
-if "wilson" not in sys.modules:
+try:
+    import wilson
+except ModuleNotFoundError as exc:
+    if exc.name != "wilson":
+        raise
+    # Keep import-only checks usable without Wilson, but never shadow a real
+    # installation needed by the export and running tests.
     wilson_stub = types.ModuleType("wilson")
     wilson_stub.wcxf = types.SimpleNamespace()
     sys.modules["wilson"] = wilson_stub

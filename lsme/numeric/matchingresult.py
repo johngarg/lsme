@@ -8,10 +8,12 @@ from wilson import wcxf
 
 GEV = 1e-3
 MZ = 91.1876 * GEV
+BARYON_VIOLATING_WARSAW_OPERATORS = frozenset({"duql", "duue", "qqql", "qque"})
 
 class GenericMatchingResult:
-    """Class for storing MatchMaker matching results. All dimensionful quantities
-    are in TeV. Scale is initialised to 1 TeV.
+    """Class for storing MatchMaker matching results. Model parameters and direct
+    coefficient methods use TeV units; coeff_dict exports in GeV units.
+    Scale is initialised to 1 TeV.
     Gauge and Yukawa defaults are fixed full-SM MS-bar inputs at MZ;
     changing scale does not evolve these inputs.
 
@@ -132,22 +134,31 @@ class GenericMatchingResult:
         return tree_level_result / loop_level_result
 
     def coeff_dict(self):
+        """Return baryon-conserving Warsaw coefficients in WCxf GeV units.
+
+        Dimension-six coefficients are in GeV**-2; the dimension-five
+        Weinberg coefficients are in GeV**-1. The unsupported baryon-violating
+        operator families are omitted, independently of WCxf's sector names.
+        Other missing coefficient methods raise AttributeError.
+
+        Direct alpha... methods and self.scale retain TeV units. Pass this
+        dictionary directly to Wilson with scale=self.scale / GEV; do not
+        apply another coefficient-unit conversion.
+        """
         sectors = wcxf.Basis["SMEFT", "Warsaw"].sectors
         coeff_dict_ = {}
-        for sector, ops in sectors.items():
-            if sector == "dB=dL=1":
-                print(
-                    f"Skipping operators in {sector} sector, since these are not implemented yet."
-                )
-                continue
-
-            for op in ops.keys():
+        for ops in sectors.values():
+            for op in ops:
+                if op.split("_", 1)[0] in BARYON_VIOLATING_WARSAW_OPERATORS:
+                    continue
                 coeff_dict_[op] = self._get_wc_in_wcxf(op)
 
         return coeff_dict_
 
     def _get_wc_in_wcxf(self, op: str):
+        """Map one Warsaw operator to its coefficient in GeV units."""
         name, *flavour = op.split("_")
+        unit_factor = GEV if name == "llphiphi" else GEV**2
         zero_indexed_flavour_indices = [int(i)-1 for i in flavour[0]] if flavour else []
         name = name.replace("phi", "H").replace("tilde", "t")
         wcxf_mme_map = {
@@ -162,7 +173,7 @@ class GenericMatchingResult:
             name = wcxf_mme_map[name]
 
         func = getattr(self, f"alphaO{name}" if name != "llHH" else "alphaWeinberg")
-        return func(*zero_indexed_flavour_indices)
+        return unit_factor * func(*zero_indexed_flavour_indices)
 
     def exotic_param_dims_dict(self):
         return {
