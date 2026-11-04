@@ -33,7 +33,6 @@ from wilson.util import smeftutil
 from lsme import numeric
 from lsme.numeric.matchingresult import GEV
 
-IDENTICAL_CURRENT_OPERATORS = ("ll", "qq1", "qq3", "uu", "dd", "ee")
 DIPOLE_OPERATORS = ("dB", "dG", "dW", "uB", "uG", "uW", "eB", "eW")
 LOG_STEP = 0.1
 
