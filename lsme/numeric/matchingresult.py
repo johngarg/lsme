@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-from dataclasses import dataclass
-from typing import List
+from functools import lru_cache
 import numpy as np
 
 from wilson import wcxf
-from wilson.util import smeftutil
 
 from .sm_running import SM_PARAMETER_NAMES, sm_parameters
 
@@ -159,48 +157,29 @@ class GenericMatchingResult:
     def to_wcxf(self):
         """Return a WCxf SMEFT Warsaw object with converted conventions and units.
 
-        Average equivalent entries of each identical-current tensor before
-        Wilson's symmetric-array conversion supplies their multiplicities
-        (up to four for ee). Operators with an odd number of field strengths
-        change sign. The raw alpha... methods
-        and coeff_dict retain MatchMaker's conventions; see the README.
+        Sum distinct current orderings for each identical-current operator,
+        including Fierz-related orderings for ee. Operators with an odd number
+        of field strengths change sign. The raw alpha... methods and coeff_dict
+        retain MatchMaker's conventions; see the README.
 
         Values are converted to WCxf units, GeV**-2 at dimension six and
         GeV**-1 for the Weinberg coefficients, and the scale to GeV. Use
         wilson.Wilson.from_wc(result.to_wcxf()) for running, or .dump() to
         write a WCxf file.
         """
-        coefficients = self.coeff_dict()
-        # These are full-sum coefficients, not non-redundant WCxf input:
-        # wcxf2arrays_symmetrized would divide by multiplicities too early.
-        arrays = smeftutil.wcxf2arrays(coefficients)
-        for op in IDENTICAL_CURRENT_OPERATORS:
-            # The generated formulas need not themselves obey current exchange
-            # or ee Fierz symmetry. Average the actual full tensor, rather than
-            # copying one representative to all equivalent entries.
-            method = getattr(self, self._warsaw_method(op)[0])
-            tensor = np.empty((3, 3, 3, 3), dtype=complex)
-            for indices in np.ndindex(tensor.shape):
-                key = op + "_" + "".join(str(i + 1) for i in indices)
-                tensor[indices] = (coefficients[key] if key in coefficients
-                                   else method(*indices))
-            tensor = (tensor + tensor.transpose(2, 3, 0, 1)) / 2
-            if op == "ee":
-                tensor = (tensor + tensor.transpose(2, 1, 0, 3)) / 2
-            arrays[op] = tensor
-        # Impose Hermiticity on the projected representatives (also removes
-        # roundoff-sized imaginary parts of coefficients declared real).
-        arrays = smeftutil.symmetrize(arrays)
-        for op in ODD_FIELD_STRENGTH_OPERATORS:
-            if op in arrays:
-                arrays[op] = -arrays[op]
-        # Wilson 2.5 also expects the unsupported BNV arrays to be present.
-        nonred = smeftutil.arrays2wcxf_nonred(smeftutil.add_missing(arrays))
-        # Wilson drops zeros; preserve this API's complete supported key set.
-        values = {
-            op: self._wcxf_unit_factor(op) * nonred.get(op, 0)
-            for op in coefficients
-        }
+        plan = _wcxf_export_plan()
+        values = {}
+        for key, value in self.coeff_dict().items():
+            method_name, partners, real, factor = plan[key]
+            if partners:
+                method = getattr(self, method_name)
+                value = value + method(*partners[0])
+                if len(partners) == 3:
+                    # Add the Fierz pair together, as in the tensor projection.
+                    value += method(*partners[1]) + method(*partners[2])
+            if real:
+                value = value.real
+            values[key] = factor * value
         return wcxf.WC(
             eft="SMEFT",
             basis="Warsaw",
@@ -214,11 +193,12 @@ class GenericMatchingResult:
         return GEV if op.split("_", 1)[0] == "llphiphi" else GEV**2
 
     @staticmethod
+    @lru_cache(maxsize=None)
     def _warsaw_method(op: str):
         """Return the coefficient method name and zero-indexed flavour
         indices for one Warsaw operator."""
         name, *flavour = op.split("_")
-        zero_indexed_flavour_indices = [int(i)-1 for i in flavour[0]] if flavour else []
+        zero_indexed_flavour_indices = tuple(int(i) - 1 for i in flavour[0]) if flavour else ()
         name = name.replace("phi", "H").replace("tilde", "t")
         wcxf_mme_map = {
             "G": "3G",
@@ -244,3 +224,28 @@ class GenericMatchingResult:
             param_string: np.array(getattr(self, param_string)).shape
             for param_string in self.exotic_params
         }
+
+
+@lru_cache(maxsize=1)
+def _wcxf_export_plan():
+    """Map Warsaw keys to index permutations and conventions shared by all models."""
+    plan = {}
+    for operators in wcxf.Basis["SMEFT", "Warsaw"].sectors.values():
+        for key, metadata in operators.items():
+            family = key.partition("_")[0]
+            if family in BARYON_VIOLATING_WARSAW_OPERATORS:
+                continue
+            method, indices = GenericMatchingResult._warsaw_method(key)
+            partners = ()
+            if family in IDENTICAL_CURRENT_OPERATORS:
+                p, r, s, t = indices
+                orbit = [indices, (s, t, p, r)]
+                if family == "ee":
+                    orbit.extend([(s, r, p, t), (p, t, s, r)])
+                # coeff_dict already evaluates the first, canonical ordering.
+                partners = tuple(dict.fromkeys(orbit))[1:]
+            factor = GenericMatchingResult._wcxf_unit_factor(key)
+            if family in ODD_FIELD_STRENGTH_OPERATORS:
+                factor = -factor
+            plan[key] = (method, partners, metadata.get("real", False), factor)
+    return plan

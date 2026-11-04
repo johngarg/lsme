@@ -124,6 +124,20 @@ def test_full_current_tensor_is_collected_before_export(operator, monkeypatch):
     assert result.coeff_dict() == native
 
 
+def test_export_projects_only_real_warsaw_keys(monkeypatch):
+    result = Theta1()
+    raw = 2 + 3j
+    for family in ("phie", "ee", "llphiphi"):
+        method, _ = result._warsaw_method(family)
+        monkeypatch.setattr(result, method, lambda *indices: raw)
+
+    values = result.to_wcxf().dict
+    assert values["phie_11"] == pytest.approx(raw.real * 1e-6)
+    assert values["phie_12"] == pytest.approx(raw * 1e-6)
+    assert values["ee_1122"] == pytest.approx(4 * raw.real * 1e-6)
+    assert values["llphiphi_11"] == pytest.approx(raw * 1e-3)
+
+
 def test_s2_tree_ee_has_factor_four_but_e_gauge_loop_has_factor_two():
     from lsme.numeric import GranadaS2MatchingResult as S2
     from lsme.numeric import GranadaEMatchingResult as E

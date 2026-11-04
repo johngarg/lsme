@@ -56,11 +56,11 @@ TeV units. =to_wcxf()= converts their signs and full flavour sums to WCxf
 Warsaw, multiplies dimension-six coefficients by \(10^{-6}\) and the Weinberg
 coefficient by \(10^{-3}\), and converts the scale to GeV.
 
-For =ll=, =qq1=, =qq3=, =uu= and =dd=, the exporter evaluates all flavour
-entries and averages over interchange of the two currents. For =ee= it also
-averages over the Fierz-related entries. Wilson's =arrays2wcxf_nonred= then
-collects each symmetric tensor into the non-redundant basis. Its
-multiplicities are 1 or 2 for the first five families and 1, 2 or 4 for =ee=.
+For =ll=, =qq1=, =qq3=, =uu= and =dd=, the exporter sums the distinct
+orderings related by interchange of the two currents. For =ee= the sum also
+includes Fierz-related orderings. The exporter determines the index tuples once
+from the Warsaw basis and evaluates them directly at each model point.
+Each sum has 1 or 2 terms for the first five families and 1, 2 or 4 for =ee=.
 The generated coefficients need not already have these symmetries: copying a
 single representative and multiplying it by its multiplicity is incorrect.
 For example, at unit mass and coupling the S2 tree coefficient =ee_1122=
