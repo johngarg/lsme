@@ -337,17 +337,34 @@ def test_omega1_dipole_logs_match_without_diquark_couplings():
     assert checked == 36
 
 
-def test_omega1_diquark_residual_persists_with_symmetric_coupling():
-    # Diagnostic of an unresolved matching/running discrepancy, not an
-    # expected physical identity. Neither the exporter correction nor the
-    # required yqq flavour symmetry fixes the diquark contribution.
-    result = numeric.Granadaomega1MatchingResult()
+@pytest.mark.parametrize("name", ["omega1", "Omega1"])
+def test_diquark_tree_dictionary_and_dipole_logs(name):
+    result = getattr(numeric, f"Granada{name}MatchingResult")()
     randomize(result, np.random.default_rng(5))
-    result.yqqomega1 = (result.yqqomega1 + result.yqqomega1.T) / 2
-    result.yqqomega1bar = result.yqqomega1.conjugate()
+    if name == "omega1":
+        y = result.yqqomega1
+        result.yqqomega1 = (y + y.T) / 2
+        result.yqqomega1bar = result.yqqomega1.conjugate()
+        product = np.einsum("sp,tr->prst", result.yqqomega1, result.yduomega1bar)
+        octet = -4
+    else:
+        y = result.yqqOmega1
+        result.yqqOmega1 = (y - y.T) / 2
+        result.yqqOmega1bar = result.yqqOmega1.conjugate()
+        product = np.einsum("sp,rt->prst", result.yqqOmega1bar, result.yudOmega1)
+        octet = 2
+
+    # Physical flavour tensors from de Blas et al., arXiv:1711.10391, App. D.
+    tree = tree_level(result)
+    for indices in np.ndindex(product.shape):
+        flavour = "".join(str(i + 1) for i in indices)
+        value = product[indices] * GEV**2 / result.get_mass()**2
+        for op, weight in (("quqd1", 4 / 3), ("quqd8", octet)):
+            assert tree[f"{op}_{flavour}"] == pytest.approx(weight * value, rel=1e-12, abs=1e-22)
+
     lhs = log_derivative(result)
-    rhs = wilson_beta(result, tree_level(result))
-    assert abs(rhs["dG_33"]) > 1e-12
-    assert lhs["dG_33"] == pytest.approx(-2 * rhs["dG_33"], rel=1e-8, abs=1e-22)
-    for key in ("eB_33", "eW_33"):
-        assert lhs[key] == pytest.approx(rhs[key], rel=1e-8, abs=1e-22)
+    rhs = wilson_beta(result, tree)
+    for op in DIPOLE_OPERATORS:
+        for i, j in np.ndindex(3, 3):
+            key = f"{op}_{i+1}{j+1}"
+            assert lhs[key] == pytest.approx(rhs.get(key, 0), rel=1e-8, abs=1e-22)

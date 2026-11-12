@@ -198,11 +198,10 @@ couplings the identity holds to about \(10^{-9}\) for D, \(\Delta_1\),
   quartic at tree level, \(\lambda_{\rm EFT} = \lambda - \kappa_S^2/(2M_S^2)\),
   and the logs agree with Wilson only after this shift. Feeding the class
   Wilson's (EFT) quartic is therefore wrong at \(O(\kappa_S^2/M_S^2)\).
-- *Dipole operators:* after the sign conversion the exported logarithms
-  agree with Wilson for \(\Phi\), \(\Pi_7\) and \(\varphi\), and for all 36
-  nonzero dipole logarithms in \(\omega_1\) with its diquark couplings zero.
-  With nonzero diquark couplings a residual remains, including when
-  =yqqomega1= is symmetric; it is not cured by these export corrections.
+- *Dipole operators.* The exported logarithms agree with Wilson for
+  \(\Phi\), \(\Pi_7\) and \(\varphi\). With the corrected tree coefficients
+  below, the \(\omega_1\) and \(\Omega_1\) dipole checks also agree for
+  complex, flavour-off-diagonal diquark couplings.
 - *Identical-current four-fermion operators:* the exported logarithms now
   agree after the full-tensor conversion. Wilson 2.5.2's raw =ee= beta tensor
   is not Fierz-symmetric, although =arrays2wcxf_nonred= assumes it is. The
@@ -224,6 +223,27 @@ symmetry (S1, S2, \(\Upsilon\), \(\Xi_1\), \(\Omega_2\), \(\Omega_4\),
 \(\omega_2\), \(\omega_4\), \(\zeta\)) are not covered by this check. Whether
 the SM couplings in each formula are UV or EFT parameters at one loop
 (threshold and wavefunction corrections) is not settled by it.
+
+*** Four-quark tree matching for the two diquark singlets of SU(2)
+
+The archived Matchmakereft reduction of \(E^c_{udqq}\) gives incorrect
+four-dimensional tree terms in =alphaOquqd1= and =alphaOquqd8=. LSME
+corrects these terms in the two affected model classes. For Warsaw
+indices \(prst\), the singlet and octet coefficients are
+
+- \(\omega_1\) (colour triplet), \((4/3,-4)\,y^{qq}_{sp}(y^{du}_{tr})^*/M^2\),
+  with symmetric \(y^{qq}\).
+- \(\Omega_1\) (colour sextet), \((4/3,2)\,(y^{qq}_{sp})^*y^{ud}_{rt}/M^2\),
+  with antisymmetric \(y^{qq}\).
+
+These values follow from the [[https://arxiv.org/abs/1711.10391][tree dictionary, Appendix D]]. The implementation
+retains both flavour orderings from the Fierz identity. For a general
+Green tensor \(A= C[E^c_{udqq}]\), its contributions are
+\(-A_{rtps}/3+A_{rtsp}\) and \(-2A_{rtps}\). Apply this tree correction
+when regenerating either class from the archived matching files.
+The associated evanescent terms and finite one-loop matching still
+require a separate derivation in the chosen scheme.
+
 *** Finite regulator contributions
 
 The numerical expressions cancel products of =epsilonbar= and =invepsilonbar=

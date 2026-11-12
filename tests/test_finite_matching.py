@@ -16,6 +16,25 @@ import pytest
 REFERENCE = json.loads(Path(__file__).with_name("finite_matching_reference.json").read_text())
 
 
+def quqd_tree_shift(model, sample):
+    """Replace the archived 4D tree term while keeping its loop and regulator reference."""
+    if sample["method"] not in ("alphaOquqd1", "alphaOquqd8"):
+        return 0
+    p, r, s, t = sample["indices"]
+    if model.name == "omega1":
+        prefactor = 2 * model.yduomega1bar[t, r] / model.Momega1**2
+        qq = model.yqqomega1
+    elif model.name == "Omega1":
+        prefactor = model.yudOmega1[r, t] / model.MOmega1**2
+        qq = model.yqqOmega1bar
+    else:
+        return 0
+    # The fixture uses unconstrained matrices. Keep both orderings of A_rtps.
+    corrected = (qq[s, p] - qq[p, s] / 3 if sample["method"] == "alphaOquqd1"
+                 else -2 * qq[p, s])
+    return prefactor * corrected - complex(*sample["tree"])
+
+
 @pytest.mark.parametrize("case", REFERENCE["cases"],
                          ids=lambda case: f"{case['module']}-{case['point']}")
 def test_finite_matching_against_original_classes(case):
@@ -40,9 +59,12 @@ def test_finite_matching_against_original_classes(case):
         result.onelooporder = 1
         result.epsilonbar, result.invepsilonbar = 0.25, 0.4
         regulator_probe = method(*indices)
+        tree_shift = quqd_tree_shift(result, sample)
         for name, actual in dict(finite=finite, pole_residue=pole_residue,
                                  tree=tree, regulator_probe=regulator_probe).items():
             expected = complex(*sample[name])
+            if name != "pole_residue":
+                expected += tree_shift
             assert actual == pytest.approx(expected, rel=2e-10, abs=2e-12), (
                 case["module"], case["point"], sample["method"], indices, name
             )
