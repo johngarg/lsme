@@ -51,19 +51,19 @@ class GranadaTheta1_GranadaTheta3MatchingResult(matchingresult.GenericMatchingRe
         return 0
 
     def alphaOHW(self, ):
-        return (-5/192 * self.lambdaHatTheta1 * self.onelooporder * (np.pi)**(-2) * (self.MTheta1)**(-2) * (self.g2)**(2) + -5/192 * self.lambdaHatTheta3 * self.onelooporder * (np.pi)**(-2) * (self.MTheta3)**(-2) * (self.g2)**(2))
+        return (5/192 * self.lambdaHatTheta1 * self.onelooporder * (np.pi)**(-2) * (self.MTheta1)**(-2) * (self.g2)**(2) + 5/192 * self.lambdaHatTheta3 * self.onelooporder * (np.pi)**(-2) * (self.MTheta3)**(-2) * (self.g2)**(2))
 
     def alphaOHWt(self, ):
         return 0
 
     def alphaOHB(self, ):
-        return (-3/64 * self.lambdaHatTheta3 * self.onelooporder * (np.pi)**(-2) * (self.MTheta3)**(-2) * (self.g1)**(2) + -1/192 * self.lambdaHatTheta1 * self.onelooporder * (np.pi)**(-2) * (self.MTheta1)**(-2) * (self.g1)**(2))
+        return (3/64 * self.lambdaHatTheta3 * self.onelooporder * (np.pi)**(-2) * (self.MTheta3)**(-2) * (self.g1)**(2) + 1/192 * self.lambdaHatTheta1 * self.onelooporder * (np.pi)**(-2) * (self.MTheta1)**(-2) * (self.g1)**(2))
 
     def alphaOHBt(self, ):
         return 0
 
     def alphaOHWB(self, ):
-        return (-5/64 * self.g1 * self.g2 * self.lambdaHatPrimeTheta3 * self.onelooporder * (np.pi)**(-2) * (self.MTheta3)**(-2) + -5/192 * self.g1 * self.g2 * self.lambdaHatPrimeTheta1 * self.onelooporder * (np.pi)**(-2) * (self.MTheta1)**(-2))
+        return (5/64 * self.g1 * self.g2 * self.lambdaHatPrimeTheta3 * self.onelooporder * (np.pi)**(-2) * (self.MTheta3)**(-2) + 5/192 * self.g1 * self.g2 * self.lambdaHatPrimeTheta1 * self.onelooporder * (np.pi)**(-2) * (self.MTheta1)**(-2))
 
     def alphaOHWBt(self, ):
         return 0

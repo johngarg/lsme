@@ -18,9 +18,10 @@ ODD_FIELD_STRENGTH_OPERATORS = frozenset({
 })
 
 class GenericMatchingResult:
-    """Class for storing MatchMaker matching results. Model parameters, direct
-    coefficient methods and coeff_dict use TeV units and MatchMaker
-    conventions; to_wcxf converts to WCxf conventions and GeV units.
+    """Class for storing MatchMaker matching results. Scalar Higgs portal inputs
+    follow Table 2 of arXiv:2412.01759. Direct coefficient methods and
+    coeff_dict use TeV units and MatchMaker operator conventions.
+    to_wcxf converts to WCxf conventions and GeV units.
 
     Scale is initialised to 1 TeV and must lie between MZ and 1000 TeV. The
     SM parameters g1, g2, g3, lam, muH, yu, yd, yl and the barred Yukawas are

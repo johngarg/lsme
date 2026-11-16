@@ -41,6 +41,11 @@ def test_finite_matching_against_original_classes(case):
     module = importlib.import_module("lsme.numeric." + case["module"])
     result = getattr(module, case["class"])()
     for name, value in case["parameters"]["scalars"].items():
+        # Evaluate the historical fixture at the same physical point in Table 2 inputs.
+        if name.startswith("lambdaHat") or name.removesuffix("bar") in {
+            "lambdaS", "lambdaXi", "lambdaXi1", "lambdaXi1P",
+        }:
+            value = -value
         setattr(result, name, value)
     for name, value in case["parameters"]["arrays"].items():
         setattr(result, name, np.asarray(value["real"]) + 1j * np.asarray(value["imag"]))

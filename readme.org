@@ -82,6 +82,29 @@ Previously exported WCxf files containing these operators need regeneration,
 and results obtained by running those files need recomputation. Changing the
 exporter does not repair previously saved Wilson runs.
 
+*** Scalar Higgs portal inputs
+
+The scalar matching classes use the potential convention of Table 2 of
+[[https://arxiv.org/abs/2412.01759][the LSME paper]]. For example, =lambdaS= multiplies
+\(+S^2 H^\dagger H\) in the potential, so tree-level \(C_H\) contains
+\(-\lambda_S\kappa_S^2/M_S^4\). The unprimed and primed complex-triplet
+portals use the factors of one half in Eq. (A.7) of the
+[[https://arxiv.org/abs/1711.10391][Granada dictionary]].
+
+To reproduce a parameter point from =8f17637= or an earlier LSME class,
+negate the old values of =lambdaS=, =lambdaXi=, =lambdaXi1=, =lambdaXi1P=
+and all single-multiplet =lambdaHat...= portals, including primed and
+doubly primed ones. Apply the same map to their =bar= partners. This includes
+the later doublet coupling =lambdaHatPrimePrimevarphi=. For the combined
+quadruplet class, apply the map to its single-multiplet portals. Its separate
+mixed coupling =lambdaHatTheta1Theta3= enters only paired with its conjugate.
+
+When regenerating from the archived matching results, substitute the negative
+of each of these portal symbols in the full tree and one-loop expressions.
+A monomial changes sign for an odd total number of portal factors, counting
+powers and barred factors. Apply this translation once. Direct coefficient
+methods, =coeff_dict()= and =to_wcxf()= all take the same Table 2 inputs.
+
 *** Barred parameters
 
 Parameter names ending in =bar= denote complex conjugation. For matrix-valued

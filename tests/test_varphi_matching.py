@@ -102,6 +102,9 @@ def test_prime_prime_zero_reproduces_baseline(point):
 
     result = Varphi()
     configure_baseline_point(result, point)
+    # The saved reference was evaluated with the old FeynRules portal signs.
+    for name in ("lambdaHatvarphi", "lambdaHatvarphibar", "lambdaHatPrimevarphi", "lambdaHatPrimevarphibar"):
+        setattr(result, name, -getattr(result, name))
     result.lambdaHatPrimePrimevarphi = 0
     result.lambdaHatPrimePrimevarphibar = 0
 
@@ -147,8 +150,8 @@ def test_prime_prime_bosonic_shifts():
         common
         * (
             2 * result.lam
-            + 3 * result.lambdaHatvarphi
-            + 3 * result.lambdaHatPrimevarphi
+            - 3 * result.lambdaHatvarphi
+            - 3 * result.lambdaHatPrimevarphi
         )
         / 24
     )
@@ -185,7 +188,7 @@ def test_prime_prime_phase_sensitive_higgs_shift():
         - 5 * np.log(result.Mvarphi**2 / result.mu**2)
     )
     expected = (
-        (x * result.lambdavarphi**2 + xbar * result.lambdavarphibar**2)
+        -(x * result.lambdavarphi**2 + xbar * result.lambdavarphibar**2)
         * bracket
         * result.onelooporder
         / (8 * np.pi**2 * result.Mvarphi**2)
@@ -294,7 +297,7 @@ def test_prime_prime_additional_exotic_yukawa_terms(
 
     bracket = 1 + result.invepsilonbar - np.log(result.Mvarphi**2 / result.mu**2)
     expected_extra = (
-        getattr(result, coupling_name)
+        -getattr(result, coupling_name)
         * (
             cubic_yukawa
             + sign * 5 * getattr(result, linear_name) * bracket * linear_yukawa
